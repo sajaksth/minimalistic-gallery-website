@@ -45,6 +45,8 @@ const slideshow = [
 ]
 
 // Each section is a small circle with one picture inside, scattered around the page.
+// recent: the 3 most recent items, shown in an arc on hover.
+// arcDir: which way the arc fans out ("up" or "down") so it stays on screen.
 const sections = [
   {
     label: "Photos",
@@ -54,6 +56,8 @@ const sections = [
     top: "11%",
     size: "w-[10vmin] h-[10vmin] max-w-[84px] max-h-[84px]",
     delay: "0s",
+    arcDir: "down" as const,
+    recent: ["/gallery/1.JPEG", "/gallery/5.JPG", "/gallery/13.JPG"],
   },
   {
     label: "Stories",
@@ -63,6 +67,12 @@ const sections = [
     top: "33%",
     size: "w-[12.5vmin] h-[12.5vmin] max-w-[108px] max-h-[108px]",
     delay: "1.2s",
+    arcDir: "left" as const,
+    recent: [
+      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&q=80",
+      "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=200&q=80",
+      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=200&q=80",
+    ],
   },
   {
     label: "Blog",
@@ -72,6 +82,12 @@ const sections = [
     top: "90%",
     size: "w-[9vmin] h-[9vmin] max-w-[76px] max-h-[76px]",
     delay: "2.4s",
+    arcDir: "up" as const,
+    recent: [
+      "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=200&q=80",
+      "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&q=80",
+      "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=200&q=80",
+    ],
   },
   {
     label: "Shop",
@@ -81,8 +97,38 @@ const sections = [
     top: "66%",
     size: "w-[11.5vmin] h-[11.5vmin] max-w-[98px] max-h-[98px]",
     delay: "0.6s",
+    arcDir: "right" as const,
+    recent: [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80",
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=80",
+      "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=200&q=80",
+    ],
   },
 ]
+
+// Positions (relative to the circle, centered at 50%/50%) for the 3 recent thumbnails.
+const arcPositions = {
+  up: [
+    { left: "-11%", top: "15%" },
+    { left: "50%", top: "-20%" },
+    { left: "111%", top: "15%" },
+  ],
+  down: [
+    { left: "-11%", top: "85%" },
+    { left: "50%", top: "120%" },
+    { left: "111%", top: "85%" },
+  ],
+  left: [
+    { left: "15%", top: "-11%" },
+    { left: "-20%", top: "50%" },
+    { left: "15%", top: "111%" },
+  ],
+  right: [
+    { left: "85%", top: "-11%" },
+    { left: "120%", top: "50%" },
+    { left: "85%", top: "111%" },
+  ],
+}
 
 // A rough, hand-drawn circle ring that echoes the logo's brushy circle
 function RoughRing() {
@@ -227,23 +273,43 @@ export default function HomePage() {
         >
           {/* floating wrapper: gently bobs up and down */}
           <div
-            className="animate-float relative w-full h-full transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)]"
+            className="animate-float relative w-full h-full"
             style={{ animationDelay: section.delay }}
           >
-            {/* picture clipped to a circle */}
-            <div className="absolute inset-0 rounded-full overflow-hidden">
+            {/* recent items, fanned out in an arc on hover */}
+            {section.recent.map((img, i) => (
               <img
-                src={section.image}
-                alt={section.label}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                key={img}
+                src={img}
+                alt=""
+                aria-hidden
+                style={{
+                  left: arcPositions[section.arcDir][i].left,
+                  top: arcPositions[section.arcDir][i].top,
+                  transitionDelay: `${i * 60}ms`,
+                }}
+                className="absolute w-1/2 h-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border border-white shadow-md
+                  opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 pointer-events-none"
               />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
-              <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide">
-                {section.label}
-              </span>
+            ))}
+
+            {/* pop wrapper: slight lift + scale on hover */}
+            <div className="relative w-full h-full transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-110 drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)]">
+              {/* picture clipped to a circle */}
+              <div className="absolute inset-0 rounded-full overflow-hidden">
+                <img
+                  src={section.image}
+                  alt={section.label}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
+                <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide">
+                  {section.label}
+                </span>
+              </div>
+              {/* rough hand-drawn ring like the logo */}
+              <RoughRing />
             </div>
-            {/* rough hand-drawn ring like the logo */}
-            <RoughRing />
           </div>
         </Link>
       ))}
