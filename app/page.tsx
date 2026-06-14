@@ -104,6 +104,21 @@ const sections = [
       "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=200&q=80",
     ],
   },
+  {
+    label: "Music",
+    href: "/music",
+    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80",
+    left: "30%",
+    top: "87%",
+    size: "w-[11vmin] h-[11vmin] max-w-[92px] max-h-[92px]",
+    delay: "1.8s",
+    arcDir: "up" as const,
+    recent: [
+      "https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=200&q=80",
+      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&q=80",
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=200&q=80",
+    ],
+  },
 ]
 
 // Positions (relative to the circle, centered at 50%/50%) for the 3 recent thumbnails.
@@ -283,7 +298,7 @@ export default function HomePage() {
         </p>
         {/* quiet index: names the areas visitors can explore */}
         <p className="mt-3 text-white/70 text-[1.5vmin] sm:text-xs uppercase tracking-[0.25em] drop-shadow text-center px-4">
-          Explore — Photos · Stories · Blog · Shop
+          Explore — Photos · Stories · Music · Blog · Shop
         </p>
       </div>
 
