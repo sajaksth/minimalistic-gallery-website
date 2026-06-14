@@ -100,6 +100,29 @@ function RoughRing() {
   )
 }
 
+// A rough, hand-drawn pill ring for the music player
+function RoughPill() {
+  return (
+    <svg
+      viewBox="0 0 200 56"
+      preserveAspectRatio="none"
+      className="absolute -inset-[3px] w-[calc(100%+6px)] h-[calc(100%+6px)] pointer-events-none"
+    >
+      <defs>
+        <filter id="roughPill">
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+        </filter>
+      </defs>
+      <rect
+        x="2" y="2" width="196" height="52" rx="26" ry="26"
+        fill="none" stroke="white" strokeWidth="1.2"
+        vectorEffect="non-scaling-stroke" filter="url(#roughPill)"
+      />
+    </svg>
+  )
+}
+
 export default function HomePage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -143,7 +166,7 @@ export default function HomePage() {
       ))}
 
       {/* Compact music player in the top-right corner */}
-      <div className="absolute top-3 right-3 z-20 flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 p-1.5 pr-2.5 text-white shadow-lg">
+      <div className="absolute top-3 right-3 z-20 flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md p-1.5 pr-2.5 text-white shadow-lg">
         <img
           src={track.cover}
           alt={track.title}
@@ -168,6 +191,8 @@ export default function HomePage() {
             <SkipForward className="w-3 h-3" />
           </button>
         </div>
+        {/* rough hand-drawn ring like the logo */}
+        <RoughPill />
       </div>
 
       {/* BareBone logo right in the middle with a changing tagline underneath */}
