@@ -50,6 +50,7 @@ const sections = [
     left: "23%",
     top: "11%",
     size: "w-[10vmin] h-[10vmin] max-w-[84px] max-h-[84px]",
+    delay: "0s",
   },
   {
     label: "Stories",
@@ -58,6 +59,7 @@ const sections = [
     left: "90%",
     top: "33%",
     size: "w-[12.5vmin] h-[12.5vmin] max-w-[108px] max-h-[108px]",
+    delay: "1.2s",
   },
   {
     label: "Blog",
@@ -66,6 +68,7 @@ const sections = [
     left: "71%",
     top: "90%",
     size: "w-[9vmin] h-[9vmin] max-w-[76px] max-h-[76px]",
+    delay: "2.4s",
   },
   {
     label: "Shop",
@@ -74,6 +77,7 @@ const sections = [
     left: "8%",
     top: "66%",
     size: "w-[11.5vmin] h-[11.5vmin] max-w-[98px] max-h-[98px]",
+    delay: "0.6s",
   },
 ]
 
@@ -188,24 +192,30 @@ export default function HomePage() {
           href={section.href}
           style={{ left: section.left, top: section.top }}
           className={cn(
-            "group absolute -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 hover:scale-110",
+            "group absolute -translate-x-1/2 -translate-y-1/2",
             section.size
           )}
         >
-          {/* picture clipped to a circle */}
-          <div className="absolute inset-0 rounded-full overflow-hidden">
-            <img
-              src={section.image}
-              alt={section.label}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
-            <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide">
-              {section.label}
-            </span>
+          {/* floating wrapper: gently bobs up and down */}
+          <div
+            className="animate-float relative w-full h-full transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)]"
+            style={{ animationDelay: section.delay }}
+          >
+            {/* picture clipped to a circle */}
+            <div className="absolute inset-0 rounded-full overflow-hidden">
+              <img
+                src={section.image}
+                alt={section.label}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
+              <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide">
+                {section.label}
+              </span>
+            </div>
+            {/* rough hand-drawn ring like the logo */}
+            <RoughRing />
           </div>
-          {/* rough hand-drawn ring like the logo */}
-          <RoughRing />
         </Link>
       ))}
     </div>
