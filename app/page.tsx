@@ -34,11 +34,22 @@ const taglines = [
 
 // Full-page background slideshow images
 const slideshow = [
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80",
-  "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1600&q=80",
-  "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1600&q=80",
-  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600&q=80",
-  "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=1600&q=80",
+  "/gallery/1.JPEG",
+  "/gallery/2.jpg",
+  "/gallery/3.jpg",
+  "/gallery/5.JPG",
+  "/gallery/6.JPG",
+  "/gallery/7.JPG",
+  "/gallery/8.JPG",
+  "/gallery/9.JPG",
+  "/gallery/10.JPG",
+  "/gallery/11.JPEG",
+  "/gallery/11.JPG",
+  "/gallery/12.jpg",
+  "/gallery/13.JPG",
+  "/gallery/14.jpg",
+  "/gallery/16.JPG",
+  "/gallery/17.webp",
 ]
 
 // Each section is a small circle with one picture inside, scattered around the page.
