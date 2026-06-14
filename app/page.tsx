@@ -262,12 +262,11 @@ export default function HomePage() {
 
       {/* Small section circles scattered around the page */}
       {sections.map((section) => (
-        <Link
+        <div
           key={section.href}
-          href={section.href}
           style={{ left: section.left, top: section.top }}
           className={cn(
-            "group absolute -translate-x-1/2 -translate-y-1/2",
+            "absolute -translate-x-1/2 -translate-y-1/2",
             section.size
           )}
         >
@@ -276,7 +275,32 @@ export default function HomePage() {
             className="animate-float relative w-full h-full"
             style={{ animationDelay: section.delay }}
           >
-            {/* recent items, fanned out in an arc on hover */}
+            {/* round hover sensor + nav link: clip-path makes only the circle interactive */}
+            <Link
+              href={section.href}
+              aria-label={section.label}
+              className="peer absolute inset-0 z-10 rounded-full [clip-path:circle(50%)]"
+            />
+
+            {/* pop wrapper: slight lift + scale when the round area is hovered */}
+            <div className="relative w-full h-full transition-transform duration-300 peer-hover:-translate-y-1.5 peer-hover:scale-110 drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)] pointer-events-none">
+              {/* picture clipped to a circle */}
+              <div className="absolute inset-0 rounded-full overflow-hidden">
+                <img
+                  src={section.image}
+                  alt={section.label}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/30 peer-hover:bg-black/40 transition-colors" />
+                <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide">
+                  {section.label}
+                </span>
+              </div>
+              {/* rough hand-drawn ring like the logo */}
+              <RoughRing />
+            </div>
+
+            {/* recent items, fanned out in an arc only when the circle is hovered */}
             {section.recent.map((img, i) => (
               <img
                 key={img}
@@ -289,29 +313,11 @@ export default function HomePage() {
                   transitionDelay: `${i * 60}ms`,
                 }}
                 className="absolute w-1/2 h-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border border-white shadow-md
-                  opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 pointer-events-none"
+                  opacity-0 scale-50 peer-hover:opacity-100 peer-hover:scale-100 transition-all duration-300 pointer-events-none"
               />
             ))}
-
-            {/* pop wrapper: slight lift + scale on hover */}
-            <div className="relative w-full h-full transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-110 drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)]">
-              {/* picture clipped to a circle */}
-              <div className="absolute inset-0 rounded-full overflow-hidden">
-                <img
-                  src={section.image}
-                  alt={section.label}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
-                <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide">
-                  {section.label}
-                </span>
-              </div>
-              {/* rough hand-drawn ring like the logo */}
-              <RoughRing />
-            </div>
           </div>
-        </Link>
+        </div>
       ))}
     </div>
   )
