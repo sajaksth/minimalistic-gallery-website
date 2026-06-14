@@ -49,7 +49,7 @@ const sections = [
     image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80",
     left: "23%",
     top: "11%",
-    size: "w-[12vmin] h-[12vmin] max-w-[100px] max-h-[100px]",
+    size: "w-[10vmin] h-[10vmin] max-w-[84px] max-h-[84px]",
   },
   {
     label: "Stories",
@@ -57,7 +57,7 @@ const sections = [
     image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80",
     left: "90%",
     top: "33%",
-    size: "w-[15vmin] h-[15vmin] max-w-[130px] max-h-[130px]",
+    size: "w-[12.5vmin] h-[12.5vmin] max-w-[108px] max-h-[108px]",
   },
   {
     label: "Blog",
@@ -65,7 +65,7 @@ const sections = [
     image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&q=80",
     left: "71%",
     top: "90%",
-    size: "w-[11vmin] h-[11vmin] max-w-[90px] max-h-[90px]",
+    size: "w-[9vmin] h-[9vmin] max-w-[76px] max-h-[76px]",
   },
   {
     label: "Shop",
@@ -73,9 +73,28 @@ const sections = [
     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
     left: "8%",
     top: "66%",
-    size: "w-[14vmin] h-[14vmin] max-w-[118px] max-h-[118px]",
+    size: "w-[11.5vmin] h-[11.5vmin] max-w-[98px] max-h-[98px]",
   },
 ]
+
+// A rough, hand-drawn circle ring that echoes the logo's brushy circle
+function RoughRing() {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      className="absolute -inset-[6px] w-[calc(100%+12px)] h-[calc(100%+12px)] pointer-events-none"
+    >
+      <defs>
+        <filter id="roughRing">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
+        </filter>
+      </defs>
+      <circle cx="50" cy="50" r="46" fill="none" stroke="white" strokeWidth="1.2" filter="url(#roughRing)" />
+    </svg>
+  )
+}
 
 export default function HomePage() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -152,11 +171,11 @@ export default function HomePage() {
         <img
           src="/images/barebone-logo.png"
           alt="Bare Bone Co."
-          className="w-[68vmin] h-[68vmin] max-w-[600px] max-h-[600px] object-contain mix-blend-multiply select-none"
+          className="w-[68vmin] h-[68vmin] max-w-[600px] max-h-[600px] object-contain invert mix-blend-screen select-none"
         />
         <p
           key={currentIndex}
-          className="mt-[2vmin] font-brush text-black text-[3vmin] sm:text-2xl text-center px-4 animate-in fade-in duration-700"
+          className="mt-[2vmin] font-brush text-white text-[3vmin] sm:text-2xl text-center px-4 drop-shadow-lg animate-in fade-in duration-700"
         >
           {taglines[currentIndex % taglines.length]}
         </p>
@@ -169,20 +188,24 @@ export default function HomePage() {
           href={section.href}
           style={{ left: section.left, top: section.top }}
           className={cn(
-            "group absolute -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden",
-            "border-2 border-white shadow-lg transition-transform duration-300 hover:scale-110",
+            "group absolute -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 hover:scale-110",
             section.size
           )}
         >
-          <img
-            src={section.image}
-            alt={section.label}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
-          <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide">
-            {section.label}
-          </span>
+          {/* picture clipped to a circle */}
+          <div className="absolute inset-0 rounded-full overflow-hidden">
+            <img
+              src={section.image}
+              alt={section.label}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
+            <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide">
+              {section.label}
+            </span>
+          </div>
+          {/* rough hand-drawn ring like the logo */}
+          <RoughRing />
         </Link>
       ))}
     </div>
