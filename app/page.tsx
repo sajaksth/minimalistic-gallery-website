@@ -37,6 +37,7 @@ const slideshow = [
   "/gallery/1.JPEG",
   "/gallery/2.jpg",
   "/gallery/3.jpg",
+  "/gallery/4.jpg",
   "/gallery/5.JPG",
   "/gallery/6.JPG",
   "/gallery/7.JPG",
