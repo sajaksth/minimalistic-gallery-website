@@ -104,21 +104,6 @@ const sections = [
       "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=200&q=80",
     ],
   },
-  {
-    label: "Music",
-    href: "/music",
-    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80",
-    left: "30%",
-    top: "87%",
-    size: "w-[11vmin] h-[11vmin] max-w-[92px] max-h-[92px]",
-    delay: "1.8s",
-    arcDir: "up" as const,
-    recent: [
-      "https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=200&q=80",
-      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&q=80",
-      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=200&q=80",
-    ],
-  },
 ]
 
 // Positions (relative to the circle, centered at 50%/50%) for the 3 recent thumbnails.
@@ -186,29 +171,6 @@ function RoughRing() {
   )
 }
 
-// A rough, hand-drawn pill ring for the music player
-function RoughPill() {
-  return (
-    <svg
-      viewBox="0 0 200 56"
-      preserveAspectRatio="none"
-      className="absolute -inset-[3px] w-[calc(100%+6px)] h-[calc(100%+6px)] pointer-events-none"
-    >
-      <defs>
-        <filter id="roughPill">
-          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
-        </filter>
-      </defs>
-      <rect
-        x="2" y="2" width="196" height="52" rx="26" ry="26"
-        fill="none" stroke="white" strokeWidth="1.2"
-        vectorEffect="non-scaling-stroke" filter="url(#roughPill)"
-      />
-    </svg>
-  )
-}
-
 export default function HomePage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -252,36 +214,6 @@ export default function HomePage() {
           )}
         />
       ))}
-
-      {/* Compact music player in the top-right corner */}
-      <div className="animate-float absolute top-3 right-3 z-20 flex items-center gap-2.5 rounded-full bg-black/40 backdrop-blur-md p-2 pr-3.5 text-white shadow-lg">
-        <img
-          src={track.cover}
-          alt={track.title}
-          className={cn("w-9 h-9 rounded-full object-cover", isPlaying && "animate-spin [animation-duration:6s]")}
-        />
-        <div className="min-w-0 max-w-[120px]">
-          <p className="text-xs font-medium leading-tight truncate">{track.title}</p>
-          <p className="text-[10px] text-white/60 leading-tight truncate">{track.artist}</p>
-        </div>
-        <div className="flex items-center gap-1">
-          <button onClick={prevTrack} aria-label="Previous track" className="p-0.5 text-white/70 hover:text-white transition-colors">
-            <SkipBack className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            aria-label={isPlaying ? "Pause" : "Play"}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-black hover:scale-105 transition-transform"
-          >
-            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
-          </button>
-          <button onClick={nextTrack} aria-label="Next track" className="p-0.5 text-white/70 hover:text-white transition-colors">
-            <SkipForward className="w-3.5 h-3.5" />
-          </button>
-        </div>
-        {/* rough hand-drawn ring like the logo */}
-        <RoughPill />
-      </div>
 
       {/* BareBone logo right in the middle with a changing tagline underneath */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none">
@@ -365,6 +297,70 @@ export default function HomePage() {
           </div>
         </div>
       ))}
+
+      {/* Music hub: the player folded into a circle */}
+      <div
+        style={{ left: "30%", top: "87%" }}
+        className="group absolute -translate-x-1/2 -translate-y-1/2 w-[13vmin] h-[13vmin] max-w-[112px] max-h-[112px]"
+      >
+        <div className="animate-float relative w-full h-full" style={{ animationDelay: "1.8s" }}>
+          {/* track name + artist, on hover, above the circle */}
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[150px] text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <p className="text-white text-xs font-medium truncate drop-shadow">{track.title}</p>
+            <p className="text-white/70 text-[10px] truncate drop-shadow">{track.artist}</p>
+          </div>
+
+          <div className="relative w-full h-full transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-110 drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)]">
+            {/* album art (spins while playing) */}
+            <div className="absolute inset-0 rounded-full overflow-hidden">
+              <img
+                src={track.cover}
+                alt=""
+                className={cn(
+                  "absolute inset-0 w-full h-full object-cover",
+                  isPlaying && "animate-spin [animation-duration:8s]"
+                )}
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
+            </div>
+            <RoughRing />
+
+            {/* controls: play always visible, skip fades in on hover */}
+            <div className="absolute inset-0 flex items-center justify-center gap-1 text-white">
+              <button
+                onClick={prevTrack}
+                aria-label="Previous track"
+                className="p-0.5 text-white/80 hover:text-white opacity-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-100 group-hover:pointer-events-auto"
+              >
+                <SkipBack className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => setIsPlaying(!isPlaying)}
+                aria-label={isPlaying ? "Pause" : "Play"}
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-white text-black hover:scale-105 transition-transform shadow"
+              >
+                {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
+              </button>
+              <button
+                onClick={nextTrack}
+                aria-label="Next track"
+                className="p-0.5 text-white/80 hover:text-white opacity-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-100 group-hover:pointer-events-auto"
+              >
+                <SkipForward className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* open the full music page */}
+            <Link
+              href="/music"
+              aria-label="Open music page"
+              className="absolute bottom-1 right-1 text-white/80 hover:text-white opacity-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-100 group-hover:pointer-events-auto"
+            >
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* Load-time hint: teaches the hover interaction, then fades out */}
       <div
