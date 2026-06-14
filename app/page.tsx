@@ -164,17 +164,29 @@ export default function HomePage() {
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-white">
-      {/* Full-page background slideshow */}
+      {/* Full-page background slideshow: whole picture shown, blurred fill behind */}
       {slideshow.map((src, index) => (
-        <img
+        <div
           key={src}
-          src={src}
-          alt=""
           className={cn(
-            "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
+            "absolute inset-0 transition-opacity duration-1000",
             index === currentIndex ? "opacity-100" : "opacity-0"
           )}
-        />
+        >
+          {/* blurred copy fills the frame so there are no empty bars */}
+          <img
+            src={src}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110"
+          />
+          {/* the full, uncropped picture */}
+          <img
+            src={src}
+            alt=""
+            className="absolute inset-0 w-full h-full object-contain"
+          />
+        </div>
       ))}
 
       {/* Compact music player in the top-right corner */}
