@@ -166,7 +166,7 @@ export default function HomePage() {
       ))}
 
       {/* Compact music player in the top-right corner */}
-      <div className="absolute top-3 right-3 z-20 flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md p-1.5 pr-2.5 text-white shadow-lg">
+      <div className="animate-float absolute top-3 right-3 z-20 flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md p-1.5 pr-2.5 text-white shadow-lg">
         <img
           src={track.cover}
           alt={track.title}
