@@ -38,7 +38,7 @@ const slideshow = [
   { src: "/gallery/1.JPEG" },
   { src: "/gallery/2.jpg" },
   { src: "/gallery/3.jpg" },
-  { src: "/gallery/4.jpg", position: "center 78%" },
+  { src: "/gallery/4.jpg", position: "center 60%" },
   { src: "/gallery/5.JPG" },
   { src: "/gallery/12.jpg" },
   { src: "/gallery/13.JPG" },
