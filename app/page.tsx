@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { Play, Pause, SkipBack, SkipForward } from "lucide-react"
+import { Play, Pause, SkipBack, SkipForward, ChevronDown, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // Compact music player tracks
@@ -130,6 +130,28 @@ const arcPositions = {
   ],
 }
 
+// Starter content for the second (scroll-revealed) section.
+const featured = [
+  {
+    label: "Latest Photos",
+    href: "/photos",
+    image: "/gallery/13.JPG",
+    blurb: "From the road and the in-between.",
+  },
+  {
+    label: "Latest Story",
+    href: "/stories",
+    image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=600&q=80",
+    blurb: "Fragments of what was felt.",
+  },
+  {
+    label: "In the Shop",
+    href: "/shop",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
+    blurb: "Prints, apparel, and small things.",
+  },
+]
+
 // A rough, hand-drawn circle ring that echoes the logo's brushy circle
 function RoughRing() {
   return (
@@ -185,22 +207,23 @@ export default function HomePage() {
     setCurrentIndex((prev) => (prev + 1) % slideshow.length)
   }, [])
 
+  const [showHint, setShowHint] = useState(true)
+
   useEffect(() => {
     const interval = setInterval(nextSlide, 4000)
     return () => clearInterval(interval)
   }, [nextSlide])
 
-  // Single full-screen page: prevent the underlying layout from scrolling
+  // Load-time hint to help people discover the hover interaction; fades out after a few seconds.
   useEffect(() => {
-    const previous = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    return () => {
-      document.body.style.overflow = previous
-    }
+    const t = setTimeout(() => setShowHint(false), 5000)
+    return () => clearTimeout(t)
   }, [])
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-white">
+    <div className="scroll-smooth">
+      {/* ===== Landing: full-screen hero ===== */}
+      <section id="top" className="relative h-screen w-full overflow-hidden bg-white">
       {/* Full-page background slideshow */}
       {slideshow.map((slide, index) => (
         <img
@@ -257,6 +280,10 @@ export default function HomePage() {
           className="mt-[2vmin] font-brush text-white text-[3vmin] sm:text-2xl text-center px-4 drop-shadow-lg animate-in fade-in duration-700"
         >
           {taglines[currentIndex % taglines.length]}
+        </p>
+        {/* quiet index: names the areas visitors can explore */}
+        <p className="mt-3 text-white/70 text-[1.5vmin] sm:text-xs uppercase tracking-[0.25em] drop-shadow text-center px-4">
+          Explore — Photos · Stories · Blog · Shop
         </p>
       </div>
 
@@ -319,6 +346,77 @@ export default function HomePage() {
           </div>
         </div>
       ))}
+
+      {/* Load-time hint: teaches the hover interaction, then fades out */}
+      <div
+        className={cn(
+          "absolute bottom-24 left-1/2 -translate-x-1/2 z-20 pointer-events-none",
+          "rounded-full bg-black/40 backdrop-blur-md px-4 py-1.5 text-white text-xs tracking-wide",
+          "transition-opacity duration-700",
+          showHint ? "opacity-100" : "opacity-0"
+        )}
+      >
+        Hover a circle to peek inside
+      </div>
+
+      {/* Scroll cue: signals there's more below */}
+      <a
+        href="#more"
+        aria-label="Scroll to explore"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 text-white/80 hover:text-white transition-colors"
+      >
+        <span className="text-[10px] uppercase tracking-[0.3em]">Scroll</span>
+        <ChevronDown className="w-5 h-5 animate-bounce" />
+      </a>
+      </section>
+
+      {/* ===== Second section: starter for real depth ===== */}
+      <section
+        id="more"
+        className="relative min-h-screen bg-white text-black flex flex-col items-center justify-center px-6 py-24"
+      >
+        <div className="max-w-3xl text-center">
+          <p className="font-brush text-sm uppercase tracking-[0.3em] text-black/50 mb-4">
+            The story so far
+          </p>
+          <h2 className="font-serif text-4xl sm:text-6xl font-light leading-tight">
+            More than a logo — a way of wandering.
+          </h2>
+          <p className="mt-6 text-black/70 text-lg leading-relaxed">
+            BareBone Co. is a home for honest images, quiet stories, and the things we carry.
+            Four worlds, one road. Wander in.
+          </p>
+        </div>
+
+        <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-5xl">
+          {featured.map((item) => (
+            <Link key={item.href} href={item.href} className="group block">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-lg">
+                <img
+                  src={item.image}
+                  alt={item.label}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                  <h3 className="font-serif text-xl">{item.label}</h3>
+                  <p className="text-sm text-white/80 mt-1">{item.blurb}</p>
+                  <span className="mt-3 inline-flex items-center gap-1 text-xs uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity">
+                    Explore <ArrowRight className="w-3 h-3" />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <a
+          href="#top"
+          className="mt-16 text-xs uppercase tracking-[0.3em] text-black/50 hover:text-black transition-colors"
+        >
+          Back to top
+        </a>
+      </section>
     </div>
   )
 }
