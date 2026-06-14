@@ -32,16 +32,15 @@ const taglines = [
   "Humans Before Anything.",
 ]
 
-// Full-page background slideshow images.
-// fit: "contain" shows the whole picture (with a blurred fill) instead of cropping.
+// Full-page background slideshow images
 const slideshow = [
-  { src: "/gallery/1.JPEG" },
-  { src: "/gallery/2.jpg" },
-  { src: "/gallery/3.jpg" },
-  { src: "/gallery/4.jpg", fit: "contain" },
-  { src: "/gallery/5.JPG" },
-  { src: "/gallery/12.jpg" },
-  { src: "/gallery/13.JPG" },
+  "/gallery/1.JPEG",
+  "/gallery/2.jpg",
+  "/gallery/3.jpg",
+  "/gallery/4.jpg",
+  "/gallery/5.JPG",
+  "/gallery/12.jpg",
+  "/gallery/13.JPG",
 ]
 
 // Each section is a small circle with one picture inside, scattered around the page.
@@ -156,32 +155,16 @@ export default function HomePage() {
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-white">
       {/* Full-page background slideshow */}
-      {slideshow.map((slide, index) => (
-        <div
-          key={slide.src}
+      {slideshow.map((src, index) => (
+        <img
+          key={src}
+          src={src}
+          alt=""
           className={cn(
-            "absolute inset-0 transition-opacity duration-1000",
+            "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
             index === currentIndex ? "opacity-100" : "opacity-0"
           )}
-        >
-          {slide.fit === "contain" && (
-            // blurred copy fills the frame so the whole picture can show without empty bars
-            <img
-              src={slide.src}
-              alt=""
-              aria-hidden
-              className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110"
-            />
-          )}
-          <img
-            src={slide.src}
-            alt=""
-            className={cn(
-              "absolute inset-0 w-full h-full",
-              slide.fit === "contain" ? "object-contain" : "object-cover"
-            )}
-          />
-        </div>
+        />
       ))}
 
       {/* Compact music player in the top-right corner */}
