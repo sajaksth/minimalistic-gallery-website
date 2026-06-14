@@ -172,29 +172,29 @@ export default function HomePage() {
       ))}
 
       {/* Compact music player in the top-right corner */}
-      <div className="animate-float absolute top-3 right-3 z-20 flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md p-1.5 pr-2.5 text-white shadow-lg">
+      <div className="animate-float absolute top-3 right-3 z-20 flex items-center gap-2.5 rounded-full bg-black/40 backdrop-blur-md p-2 pr-3.5 text-white shadow-lg">
         <img
           src={track.cover}
           alt={track.title}
-          className={cn("w-7 h-7 rounded-full object-cover", isPlaying && "animate-spin [animation-duration:6s]")}
+          className={cn("w-9 h-9 rounded-full object-cover", isPlaying && "animate-spin [animation-duration:6s]")}
         />
-        <div className="min-w-0 max-w-[90px]">
-          <p className="text-[10px] font-medium leading-tight truncate">{track.title}</p>
-          <p className="text-[9px] text-white/60 leading-tight truncate">{track.artist}</p>
+        <div className="min-w-0 max-w-[120px]">
+          <p className="text-xs font-medium leading-tight truncate">{track.title}</p>
+          <p className="text-[10px] text-white/60 leading-tight truncate">{track.artist}</p>
         </div>
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-1">
           <button onClick={prevTrack} aria-label="Previous track" className="p-0.5 text-white/70 hover:text-white transition-colors">
-            <SkipBack className="w-3 h-3" />
+            <SkipBack className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => setIsPlaying(!isPlaying)}
             aria-label={isPlaying ? "Pause" : "Play"}
-            className="w-6 h-6 flex items-center justify-center rounded-full bg-white text-black hover:scale-105 transition-transform"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-black hover:scale-105 transition-transform"
           >
-            {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3 ml-0.5" />}
+            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
           </button>
           <button onClick={nextTrack} aria-label="Next track" className="p-0.5 text-white/70 hover:text-white transition-colors">
-            <SkipForward className="w-3 h-3" />
+            <SkipForward className="w-3.5 h-3.5" />
           </button>
         </div>
         {/* rough hand-drawn ring like the logo */}
@@ -206,7 +206,7 @@ export default function HomePage() {
         <img
           src="/images/barebone-logo.png"
           alt="Bare Bone Co."
-          className="w-[68vmin] h-[68vmin] max-w-[600px] max-h-[600px] object-contain invert mix-blend-screen select-none"
+          className="w-[68vmin] h-[68vmin] max-w-[600px] max-h-[600px] object-contain invert mix-blend-screen opacity-80 select-none"
         />
         <p
           key={currentIndex}
