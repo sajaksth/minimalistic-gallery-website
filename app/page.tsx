@@ -32,15 +32,16 @@ const taglines = [
   "Humans Before Anything.",
 ]
 
-// Full-page background slideshow images
+// Full-page background slideshow images.
+// position: optional object-position to control which part of a cropped photo shows.
 const slideshow = [
-  "/gallery/1.JPEG",
-  "/gallery/2.jpg",
-  "/gallery/3.jpg",
-  "/gallery/4.jpg",
-  "/gallery/5.JPG",
-  "/gallery/12.jpg",
-  "/gallery/13.JPG",
+  { src: "/gallery/1.JPEG" },
+  { src: "/gallery/2.jpg" },
+  { src: "/gallery/3.jpg" },
+  { src: "/gallery/4.jpg", position: "center 78%" },
+  { src: "/gallery/5.JPG" },
+  { src: "/gallery/12.jpg" },
+  { src: "/gallery/13.JPG" },
 ]
 
 // Each section is a small circle with one picture inside, scattered around the page.
@@ -155,11 +156,12 @@ export default function HomePage() {
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-white">
       {/* Full-page background slideshow */}
-      {slideshow.map((src, index) => (
+      {slideshow.map((slide, index) => (
         <img
-          key={src}
-          src={src}
+          key={slide.src}
+          src={slide.src}
           alt=""
+          style={slide.position ? { objectPosition: slide.position } : undefined}
           className={cn(
             "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
             index === currentIndex ? "opacity-100" : "opacity-0"
