@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, Inter } from 'next/font/google'
+import { Cormorant_Garamond, Inter, Permanent_Marker } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { CartProvider } from '@/components/cart-provider'
@@ -11,9 +11,14 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500", "600", "700"],
   variable: '--font-serif'
 });
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin"],
   variable: '--font-sans'
+});
+const permanentMarker = Permanent_Marker({
+  subsets: ["latin"],
+  weight: "400",
+  variable: '--font-brush'
 });
 
 export const metadata: Metadata = {
@@ -46,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${cormorant.variable} ${inter.variable} font-sans antialiased`}>
+      <body className={`${cormorant.variable} ${inter.variable} ${permanentMarker.variable} font-sans antialiased`}>
         <CartProvider>
           <Header />
           <main className="min-h-screen">
