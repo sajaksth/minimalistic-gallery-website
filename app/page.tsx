@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { Play, Pause, SkipBack, SkipForward, ChevronDown, ArrowRight } from "lucide-react"
+import { Play, Pause, SkipBack, SkipForward, ChevronDown, ArrowRight, ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // Compact music player tracks
@@ -319,8 +319,12 @@ export default function HomePage() {
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/30 peer-hover:bg-black/40 transition-colors" />
-                <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide">
+                <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide transition-opacity duration-300 peer-hover:opacity-0">
                   {section.label}
+                </span>
+                {/* on hover, the label swaps for an "open" arrow */}
+                <span className="absolute inset-0 flex items-center justify-center text-white opacity-0 transition-opacity duration-300 peer-hover:opacity-100">
+                  <ArrowUpRight className="w-1/3 h-1/3" />
                 </span>
               </div>
               {/* rough hand-drawn ring like the logo */}
