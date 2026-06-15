@@ -265,18 +265,19 @@ export default function HomePage() {
                   alt={section.label}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/30 peer-hover:bg-black/40 transition-colors" />
-                <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide transition-opacity duration-300 peer-hover:opacity-0">
-                  {section.label}
-                </span>
-                {/* on hover, the label swaps for an "open" arrow */}
-                <span className="absolute inset-0 flex items-center justify-center text-white opacity-0 transition-opacity duration-300 peer-hover:opacity-100">
-                  <ArrowUpRight className="w-1/3 h-1/3" />
-                </span>
+                <div className="absolute inset-0 bg-black/30" />
               </div>
               {/* rough hand-drawn ring like the logo */}
               <RoughRing />
             </div>
+
+            {/* label at rest -> open-arrow on hover (direct siblings of the peer so peer-hover works) */}
+            <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide pointer-events-none transition-opacity duration-300 peer-hover:opacity-0">
+              {section.label}
+            </span>
+            <span className="absolute inset-0 flex items-center justify-center text-white opacity-0 pointer-events-none transition-opacity duration-300 peer-hover:opacity-100">
+              <ArrowUpRight className="w-1/3 h-1/3" />
+            </span>
 
             {/* recent items, fanned out in an arc only when the circle is hovered */}
             {section.recent.map((img, i) => (
