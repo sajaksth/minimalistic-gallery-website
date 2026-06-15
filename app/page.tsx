@@ -52,22 +52,22 @@ const sections = [
     label: "Photos",
     href: "/photos",
     image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80",
-    left: "23%",
-    top: "11%",
+    left: "20%",
+    top: "15%",
     size: "w-[10vmin] h-[10vmin] max-w-[84px] max-h-[84px]",
     delay: "0s",
-    arcDir: "down" as const,
+    arcDir: "up" as const,
     recent: ["/gallery/1.JPEG", "/gallery/5.JPG", "/gallery/13.JPG"],
   },
   {
     label: "Stories",
     href: "/stories",
     image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80",
-    left: "30%",
-    top: "87%",
+    left: "22%",
+    top: "86%",
     size: "w-[12.5vmin] h-[12.5vmin] max-w-[108px] max-h-[108px]",
     delay: "1.2s",
-    arcDir: "up" as const,
+    arcDir: "left" as const,
     recent: [
       "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&q=80",
       "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=200&q=80",
@@ -78,11 +78,11 @@ const sections = [
     label: "Blog",
     href: "/blog",
     image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&q=80",
-    left: "8%",
-    top: "66%",
+    left: "13%",
+    top: "54%",
     size: "w-[9vmin] h-[9vmin] max-w-[76px] max-h-[76px]",
     delay: "2.4s",
-    arcDir: "right" as const,
+    arcDir: "left" as const,
     recent: [
       "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=200&q=80",
       "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&q=80",
@@ -93,11 +93,11 @@ const sections = [
     label: "Shop",
     href: "/shop",
     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80",
-    left: "71%",
-    top: "90%",
+    left: "80%",
+    top: "85%",
     size: "w-[11.5vmin] h-[11.5vmin] max-w-[98px] max-h-[98px]",
     delay: "0.6s",
-    arcDir: "up" as const,
+    arcDir: "right" as const,
     recent: [
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80",
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=80",
@@ -301,7 +301,7 @@ export default function HomePage() {
 
       {/* Music: a circle like the others, with the player folded in */}
       <div
-        style={{ left: "90%", top: "33%" }}
+        style={{ left: "86%", top: "30%" }}
         className="group absolute -translate-x-1/2 -translate-y-1/2 w-[11vmin] h-[11vmin] max-w-[96px] max-h-[96px]"
       >
         <div className="animate-float relative w-full h-full" style={{ animationDelay: "1.8s" }}>
@@ -313,8 +313,8 @@ export default function HomePage() {
               alt=""
               aria-hidden
               style={{
-                left: arcPositions.left[i].left,
-                top: arcPositions.left[i].top,
+                left: arcPositions.down[i].left,
+                top: arcPositions.down[i].top,
                 transitionDelay: `${i * 60}ms`,
               }}
               className="absolute w-[60%] h-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border-2 border-white shadow-lg
