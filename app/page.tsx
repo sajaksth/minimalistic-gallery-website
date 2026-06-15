@@ -109,24 +109,24 @@ const sections = [
 // Positions (relative to the circle, centered at 50%/50%) for the 3 recent thumbnails.
 const arcPositions = {
   up: [
-    { left: "-11%", top: "15%" },
-    { left: "50%", top: "-20%" },
-    { left: "111%", top: "15%" },
+    { left: "-22%", top: "12%" },
+    { left: "50%", top: "-32%" },
+    { left: "122%", top: "12%" },
   ],
   down: [
-    { left: "-11%", top: "85%" },
-    { left: "50%", top: "120%" },
-    { left: "111%", top: "85%" },
+    { left: "-22%", top: "88%" },
+    { left: "50%", top: "132%" },
+    { left: "122%", top: "88%" },
   ],
   left: [
-    { left: "15%", top: "-11%" },
-    { left: "-20%", top: "50%" },
-    { left: "15%", top: "111%" },
+    { left: "12%", top: "-22%" },
+    { left: "-32%", top: "50%" },
+    { left: "12%", top: "122%" },
   ],
   right: [
-    { left: "85%", top: "-11%" },
-    { left: "120%", top: "50%" },
-    { left: "85%", top: "111%" },
+    { left: "88%", top: "-22%" },
+    { left: "132%", top: "50%" },
+    { left: "88%", top: "122%" },
   ],
 }
 
@@ -257,7 +257,7 @@ export default function HomePage() {
             />
 
             {/* pop wrapper: slight lift + scale when the round area is hovered */}
-            <div className="relative w-full h-full transition-transform duration-300 peer-hover:-translate-y-1.5 peer-hover:scale-110 drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)] pointer-events-none">
+            <div className="relative w-full h-full transition-transform duration-300 peer-hover:-translate-y-1.5 peer-hover:scale-[1.18] drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)] pointer-events-none">
               {/* picture clipped to a circle */}
               <div className="absolute inset-0 rounded-full overflow-hidden">
                 <img
@@ -290,7 +290,7 @@ export default function HomePage() {
                   top: arcPositions[section.arcDir][i].top,
                   transitionDelay: `${i * 60}ms`,
                 }}
-                className="absolute w-1/2 h-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border border-white shadow-md
+                className="absolute w-[60%] h-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border-2 border-white shadow-lg
                   opacity-0 scale-50 peer-hover:opacity-100 peer-hover:scale-100 transition-all duration-300 pointer-events-none"
               />
             ))}
@@ -316,7 +316,7 @@ export default function HomePage() {
                 top: arcPositions.left[i].top,
                 transitionDelay: `${i * 60}ms`,
               }}
-              className="absolute w-1/2 h-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border border-white shadow-md
+              className="absolute w-[60%] h-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border-2 border-white shadow-lg
                 opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 pointer-events-none"
             />
           ))}
@@ -327,7 +327,7 @@ export default function HomePage() {
             <p className="text-white/70 text-[10px] truncate drop-shadow">{track.artist}</p>
           </div>
 
-          <div className="relative w-full h-full transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-110 drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)]">
+          <div className="relative w-full h-full transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-[1.18] drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)]">
             {/* navigation sensor: click the circle to open the music page */}
             <Link
               href="/music"
