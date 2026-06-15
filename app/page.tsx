@@ -388,6 +388,15 @@ export default function HomePage() {
                 <SkipForward className="w-3.5 h-3.5" />
               </button>
             </div>
+
+            {/* open-page cue: matches the arrow the other circles show on hover */}
+            <Link
+              href="/music"
+              aria-label="Open music page"
+              className="absolute bottom-1 right-1 text-white/90 hover:text-white opacity-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-100 group-hover:pointer-events-auto drop-shadow"
+            >
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </div>
