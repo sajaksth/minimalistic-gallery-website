@@ -298,12 +298,29 @@ export default function HomePage() {
         </div>
       ))}
 
-      {/* Music hub: the player folded into a circle */}
+      {/* Music: a circle like the others, with the player folded in */}
       <div
         style={{ left: "30%", top: "87%" }}
-        className="group absolute -translate-x-1/2 -translate-y-1/2 w-[13vmin] h-[13vmin] max-w-[112px] max-h-[112px]"
+        className="group absolute -translate-x-1/2 -translate-y-1/2 w-[11vmin] h-[11vmin] max-w-[96px] max-h-[96px]"
       >
         <div className="animate-float relative w-full h-full" style={{ animationDelay: "1.8s" }}>
+          {/* recent tracks fan out in an arc on hover (like the other circles) */}
+          {tracks.map((t, i) => (
+            <img
+              key={t.cover}
+              src={t.cover}
+              alt=""
+              aria-hidden
+              style={{
+                left: arcPositions.up[i].left,
+                top: arcPositions.up[i].top,
+                transitionDelay: `${i * 60}ms`,
+              }}
+              className="absolute w-1/2 h-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border border-white shadow-md
+                opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 pointer-events-none"
+            />
+          ))}
+
           {/* track name + artist, on hover, above the circle */}
           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[150px] text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             <p className="text-white text-xs font-medium truncate drop-shadow">{track.title}</p>
@@ -311,8 +328,15 @@ export default function HomePage() {
           </div>
 
           <div className="relative w-full h-full transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-110 drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)]">
+            {/* navigation sensor: click the circle to open the music page */}
+            <Link
+              href="/music"
+              aria-label="Music"
+              className="absolute inset-0 rounded-full [clip-path:circle(50%)]"
+            />
+
             {/* album art (spins while playing) */}
-            <div className="absolute inset-0 rounded-full overflow-hidden">
+            <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
               <img
                 src={track.cover}
                 alt=""
@@ -321,11 +345,21 @@ export default function HomePage() {
                   isPlaying && "animate-spin [animation-duration:8s]"
                 )}
               />
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
             </div>
             <RoughRing />
 
-            {/* controls: play always visible, skip fades in on hover */}
+            {/* "Music" label: only when not playing and not hovered */}
+            <span
+              className={cn(
+                "absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide pointer-events-none transition-opacity duration-300 group-hover:opacity-0",
+                isPlaying && "opacity-0"
+              )}
+            >
+              Music
+            </span>
+
+            {/* controls: play/pause shows when playing or hovered; skip only on hover */}
             <div className="absolute inset-0 flex items-center justify-center gap-1 text-white">
               <button
                 onClick={prevTrack}
@@ -337,7 +371,12 @@ export default function HomePage() {
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
                 aria-label={isPlaying ? "Pause" : "Play"}
-                className="w-7 h-7 flex items-center justify-center rounded-full bg-white text-black hover:scale-105 transition-transform shadow"
+                className={cn(
+                  "w-7 h-7 flex items-center justify-center rounded-full bg-white text-black hover:scale-105 transition-all duration-300 shadow",
+                  isPlaying
+                    ? "opacity-100 pointer-events-auto"
+                    : "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
+                )}
               >
                 {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
               </button>
@@ -349,15 +388,6 @@ export default function HomePage() {
                 <SkipForward className="w-3.5 h-3.5" />
               </button>
             </div>
-
-            {/* open the full music page */}
-            <Link
-              href="/music"
-              aria-label="Open music page"
-              className="absolute bottom-1 right-1 text-white/80 hover:text-white opacity-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-100 group-hover:pointer-events-auto"
-            >
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
           </div>
         </div>
       </div>
