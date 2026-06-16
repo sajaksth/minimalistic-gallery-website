@@ -1,5 +1,6 @@
 import { StoryCard } from "@/components/stories/story-card"
 import { FeaturedStory } from "@/components/stories/featured-story"
+import { SectionHeader } from "@/components/section-header"
 
 const stories = [
   {
@@ -79,19 +80,11 @@ const categories = ["All", "Fiction", "Poetry", "Memoir", "Essay"]
 
 export default function StoriesPage() {
   return (
-    <div className="pt-20 lg:pt-24">
-      {/* Header */}
-      <section className="py-16 lg:py-24 text-center">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <h1 className="font-serif text-4xl lg:text-6xl font-light tracking-tight">
-            Stories
-          </h1>
-          <p className="mt-6 text-muted-foreground text-lg text-pretty">
-            A collection of fiction, poetry, and personal narratives that explore 
-            the depths of human experience and imagination.
-          </p>
-        </div>
-      </section>
+    <div className="bg-white text-foreground">
+      <SectionHeader
+        title="Stories"
+        description="Fiction, poetry, and honest fragments of what was felt."
+      />
 
       {/* Category Filters */}
       <section className="border-y border-border">

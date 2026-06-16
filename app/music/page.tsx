@@ -1,6 +1,7 @@
 import { MusicPlayer } from "@/components/music/music-player"
 import { AlbumGrid } from "@/components/music/album-grid"
 import { TrackList } from "@/components/music/track-list"
+import { SectionHeader } from "@/components/section-header"
 
 const albums = [
   {
@@ -84,19 +85,11 @@ const featuredTracks = [
 
 export default function MusicPage() {
   return (
-    <div className="pt-20 lg:pt-24">
-      {/* Header */}
-      <section className="py-16 lg:py-24 text-center">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <h1 className="font-serif text-4xl lg:text-6xl font-light tracking-tight">
-            Music
-          </h1>
-          <p className="mt-6 text-muted-foreground text-lg text-pretty">
-            Original compositions spanning ambient soundscapes, electronic rhythms, 
-            and cinematic scores. Perfect for focus, relaxation, and creative inspiration.
-          </p>
-        </div>
-      </section>
+    <div className="bg-white text-foreground">
+      <SectionHeader
+        title="Music"
+        description="Soundscapes for the wander — play it loud, let it linger."
+      />
 
       {/* Featured Player */}
       <MusicPlayer />

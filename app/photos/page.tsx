@@ -1,5 +1,6 @@
 import { PhotoGallery } from "@/components/photos/photo-gallery"
 import { PhotoFilters } from "@/components/photos/photo-filters"
+import { SectionHeader } from "@/components/section-header"
 
 const photos = [
   {
@@ -104,19 +105,11 @@ const categories = ["all", "landscape", "portrait", "architecture", "nature"]
 
 export default function PhotosPage() {
   return (
-    <div className="pt-20 lg:pt-24">
-      {/* Header */}
-      <section className="py-16 lg:py-24 text-center">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <h1 className="font-serif text-4xl lg:text-6xl font-light tracking-tight">
-            Photography
-          </h1>
-          <p className="mt-6 text-muted-foreground text-lg text-pretty">
-            A visual journey through landscapes, portraits, and urban environments. 
-            Each image captures a moment of beauty and contemplation.
-          </p>
-        </div>
-      </section>
+    <div className="bg-white text-foreground">
+      <SectionHeader
+        title="Photos"
+        description="A visual journey through landscapes, portraits, and the quiet in-between."
+      />
 
       {/* Filters */}
       <PhotoFilters categories={categories} />

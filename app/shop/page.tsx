@@ -1,6 +1,7 @@
 import { ShopFilters } from "@/components/shop/shop-filters"
 import { ProductGrid } from "@/components/shop/product-grid"
 import { FeaturedProducts } from "@/components/shop/featured-products"
+import { SectionHeader } from "@/components/section-header"
 
 const products = [
   {
@@ -117,19 +118,11 @@ const categories = ["All", "Prints", "Apparel", "Music", "Books", "Accessories"]
 
 export default function ShopPage() {
   return (
-    <div className="pt-20 lg:pt-24">
-      {/* Header */}
-      <section className="py-16 lg:py-24 text-center">
-        <div className="max-w-3xl mx-auto px-6 lg:px-8">
-          <h1 className="font-serif text-4xl lg:text-6xl font-light tracking-tight">
-            Shop
-          </h1>
-          <p className="mt-6 text-muted-foreground text-lg text-pretty">
-            Exclusive prints, apparel, vinyl, and accessories. 
-            Each piece crafted with care and attention to detail.
-          </p>
-        </div>
-      </section>
+    <div className="bg-white text-foreground">
+      <SectionHeader
+        title="Shop"
+        description="Prints, apparel, and small things made with care."
+      />
 
       {/* Featured Products */}
       <FeaturedProducts products={products.slice(0, 3)} />

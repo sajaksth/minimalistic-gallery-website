@@ -1,6 +1,7 @@
 import { BlogHeader } from "@/components/blog/blog-header"
 import { FeaturedPost } from "@/components/blog/featured-post"
 import { BlogGrid } from "@/components/blog/blog-grid"
+import { SectionHeader } from "@/components/section-header"
 
 export const metadata = {
   title: "Blog | BareBone",
@@ -82,7 +83,11 @@ const categories = ["All", "Creative Process", "Photography", "Music", "Writing"
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen pt-20 lg:pt-24">
+    <div className="min-h-screen bg-white text-foreground">
+      <SectionHeader
+        title="Blog"
+        description="Notes from the field — thoughts, process, and small detours."
+      />
       <BlogHeader categories={categories} />
       <FeaturedPost post={featuredPost} />
       <BlogGrid posts={blogPosts} />

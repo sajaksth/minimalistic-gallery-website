@@ -11,18 +11,9 @@ export function BlogHeader({ categories }: BlogHeaderProps) {
   const [activeCategory, setActiveCategory] = useState("All")
 
   return (
-    <section className="max-w-7xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
-      <div className="max-w-2xl">
-        <h1 className="font-serif text-4xl lg:text-5xl font-medium">
-          Weekly Blog
-        </h1>
-        <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-          Thoughts, stories, and insights from behind the scenes. Updated every week with fresh perspectives on creativity and craft.
-        </p>
-      </div>
-
+    <section className="max-w-7xl mx-auto px-6 lg:px-8 pb-4">
       {/* Category Filters */}
-      <div className="mt-10 flex flex-wrap gap-2">
+      <div className="flex flex-wrap justify-center gap-2">
         {categories.map((category) => (
           <button
             key={category}
