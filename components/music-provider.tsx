@@ -9,25 +9,31 @@ export type Track = {
   src: string
 }
 
-// Shared playlist. Audio is royalty-free demo music (SoundHelix).
+// Shared playlist.
 export const tracks: Track[] = [
   {
-    title: "Morning Light",
-    artist: "Ambient Horizons",
+    title: "Instincts",
+    artist: "Bare Bone Co.",
     cover: "https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=200&q=80",
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    src: "/audio/instincts.mp3",
   },
   {
-    title: "Coastal Dreams",
-    artist: "Luna Waves",
+    title: "River",
+    artist: "Bare Bone Co.",
     cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&q=80",
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    src: "/audio/river.mp3",
   },
   {
-    title: "Evening Calm",
-    artist: "Serene Collective",
+    title: "Finding You (Again)",
+    artist: "Bare Bone Co.",
     cover: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=200&q=80",
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    src: "/audio/finding-you-again.mp3",
+  },
+  {
+    title: "Lullaby to myself",
+    artist: "Bare Bone Co.",
+    cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=200&q=80",
+    src: "/audio/lullaby-to-myself.mp3",
   },
 ]
 

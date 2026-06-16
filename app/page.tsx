@@ -397,7 +397,7 @@ export default function HomePage() {
       >
         <div className="animate-float relative w-full h-full" style={{ animationDelay: "1.8s" }}>
           {/* recent tracks fan out in an arc on hover (like the other circles) */}
-          {tracks.map((t, i) => (
+          {tracks.slice(0, 3).map((t, i) => (
             <img
               key={t.cover}
               src={t.cover}
