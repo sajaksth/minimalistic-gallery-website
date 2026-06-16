@@ -4,25 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { Play, Pause, SkipBack, SkipForward, ChevronDown, ArrowRight, ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-// Compact music player tracks
-const tracks = [
-  {
-    title: "Morning Light",
-    artist: "Ambient Horizons",
-    cover: "https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=200&q=80",
-  },
-  {
-    title: "Coastal Dreams",
-    artist: "Luna Waves",
-    cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&q=80",
-  },
-  {
-    title: "Evening Calm",
-    artist: "Serene Collective",
-    cover: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=200&q=80",
-  },
-]
+import { useMusic } from "@/components/music-provider"
 
 // Taglines that change with each slide
 const taglines = [
@@ -130,27 +112,140 @@ const arcPositions = {
   ],
 }
 
-// Starter content for the second (scroll-revealed) section.
-const featured = [
+// Content for the scroll-below section: every world, with a recents slideshow + narrative.
+const pageSections = [
   {
-    label: "Latest Photos",
+    label: "Photos",
     href: "/photos",
-    image: "/gallery/13.JPG",
-    blurb: "From the road and the in-between.",
+    narrative:
+      "Visual narratives caught in passing — the road, the light, and the quiet in-between moments.",
+    images: ["/gallery/1.JPEG", "/gallery/5.JPG", "/gallery/13.JPG"],
   },
   {
-    label: "Latest Story",
+    label: "Stories",
     href: "/stories",
-    image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=600&q=80",
-    blurb: "Fragments of what was felt.",
+    narrative:
+      "Short fiction and honest fragments — the shapes of a feeling, written down before it fades.",
+    images: [
+      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&q=80",
+      "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=600&q=80",
+      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&q=80",
+    ],
   },
   {
-    label: "In the Shop",
+    label: "Music",
+    href: "/music",
+    narrative:
+      "Soundscapes for the wander — slow mornings and long roads. Play it loud, let it linger.",
+    images: [
+      "https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=600&q=80",
+      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80",
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=600&q=80",
+    ],
+  },
+  {
+    label: "Blog",
+    href: "/blog",
+    narrative:
+      "Notes from the field — thoughts, process, and the small detours worth writing about.",
+    images: [
+      "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&q=80",
+      "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=600&q=80",
+      "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=600&q=80",
+    ],
+  },
+  {
+    label: "Shop",
     href: "/shop",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
-    blurb: "Prints, apparel, and small things.",
+    narrative:
+      "Prints, apparel, and small things made with care — carry a piece of the journey with you.",
+    images: [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80",
+      "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&q=80",
+    ],
   },
 ]
+
+// A rough, hand-drawn rectangular frame (sketchy ink border) for the section cards.
+function RoughFrame() {
+  return (
+    <svg
+      viewBox="0 0 200 150"
+      preserveAspectRatio="none"
+      className="absolute inset-0 w-full h-full pointer-events-none"
+    >
+      <defs>
+        <filter id="roughFrame">
+          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" />
+        </filter>
+      </defs>
+      <rect
+        x="4" y="4" width="192" height="142" rx="10"
+        fill="none" stroke="black" strokeWidth="1.5"
+        vectorEffect="non-scaling-stroke" filter="url(#roughFrame)"
+      />
+    </svg>
+  )
+}
+
+// A hand-drawn divider line.
+function SketchLine({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 200 12" preserveAspectRatio="none" className={cn("h-3", className)}>
+      <defs>
+        <filter id="roughLine">
+          <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+        </filter>
+      </defs>
+      <path d="M2 6 H198" fill="none" stroke="currentColor" strokeWidth="2" filter="url(#roughLine)" />
+    </svg>
+  )
+}
+
+// One "world" in the scroll-below section: a recents slideshow + narrative + see-more cue.
+function SectionFeature({
+  section,
+}: {
+  section: { label: string; href: string; narrative: string; images: string[] }
+}) {
+  const [index, setIndex] = useState(0)
+  useEffect(() => {
+    const interval = setInterval(
+      () => setIndex((p) => (p + 1) % section.images.length),
+      3200
+    )
+    return () => clearInterval(interval)
+  }, [section.images.length])
+
+  return (
+    <Link href={section.href} className="group block">
+      {/* recents slideshow inside a sketchy frame */}
+      <div className="relative aspect-[4/3] overflow-hidden rounded-[10px]">
+        {section.images.map((img, i) => (
+          <img
+            key={img}
+            src={img}
+            alt=""
+            className={cn(
+              "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+              i === index ? "opacity-100" : "opacity-0"
+            )}
+          />
+        ))}
+        <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors" />
+        <RoughFrame />
+      </div>
+      <h3 className="font-brush text-2xl mt-4">{section.label}</h3>
+      <p className="mt-1.5 text-black/65 leading-relaxed text-sm">{section.narrative}</p>
+      <span className="mt-2 inline-flex items-center gap-1 font-brush text-base text-black group-hover:gap-2 transition-all">
+        See more <ArrowRight className="w-4 h-4" />
+      </span>
+    </Link>
+  )
+}
 
 // A rough, hand-drawn circle ring that echoes the logo's brushy circle
 function RoughRing() {
@@ -173,12 +268,8 @@ function RoughRing() {
 
 export default function HomePage() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTrack, setCurrentTrack] = useState(0)
-  const track = tracks[currentTrack]
-
-  const nextTrack = () => setCurrentTrack((p) => (p + 1) % tracks.length)
-  const prevTrack = () => setCurrentTrack((p) => (p - 1 + tracks.length) % tracks.length)
+  // Shared, site-wide music state so playback continues across pages.
+  const { tracks, track, isPlaying, toggle, next: nextTrack, prev: prevTrack } = useMusic()
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % slideshow.length)
@@ -370,7 +461,7 @@ export default function HomePage() {
                 <SkipBack className="w-3.5 h-3.5" />
               </button>
               <button
-                onClick={() => setIsPlaying(!isPlaying)}
+                onClick={toggle}
                 aria-label={isPlaying ? "Pause" : "Play"}
                 className={cn(
                   "w-7 h-7 flex items-center justify-center rounded-full bg-white text-black hover:scale-105 transition-all duration-300 shadow",
@@ -425,52 +516,37 @@ export default function HomePage() {
       </a>
       </section>
 
-      {/* ===== Second section: starter for real depth ===== */}
-      <section
-        id="more"
-        className="relative min-h-screen bg-white text-black flex flex-col items-center justify-center px-6 py-24"
-      >
-        <div className="max-w-3xl text-center">
-          <p className="font-brush text-sm uppercase tracking-[0.3em] text-black/50 mb-4">
-            The story so far
+      {/* ===== Second section: the worlds, sketched out ===== */}
+      <section id="more" className="relative bg-white text-black px-6 py-20 sm:py-24">
+        {/* brand header */}
+        <div className="flex flex-col items-center text-center">
+          <img
+            src="/images/barebone-logo.png"
+            alt="Bare Bone Co."
+            className="w-24 h-24 sm:w-28 sm:h-28 object-contain select-none"
+          />
+          <h2 className="font-brush text-3xl sm:text-4xl mt-1">Bare Bone Co.</h2>
+          <p className="mt-3 max-w-xl font-brush text-lg text-black/60">
+            Honest images, quiet sounds, and the things we carry — five worlds, one road.
           </p>
-          <h2 className="font-serif text-4xl sm:text-6xl font-light leading-tight">
-            More than a logo — a way of wandering.
-          </h2>
-          <p className="mt-6 text-black/70 text-lg leading-relaxed">
-            BareBone Co. is a home for honest images, quiet stories, and the things we carry.
-            Four worlds, one road. Wander in.
-          </p>
+          <SketchLine className="w-44 mt-6 text-black/40" />
         </div>
 
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-5xl">
-          {featured.map((item) => (
-            <Link key={item.href} href={item.href} className="group block">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-lg">
-                <img
-                  src={item.image}
-                  alt={item.label}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
-                <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-                  <h3 className="font-serif text-xl">{item.label}</h3>
-                  <p className="text-sm text-white/80 mt-1">{item.blurb}</p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-xs uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity">
-                    Explore <ArrowRight className="w-3 h-3" />
-                  </span>
-                </div>
-              </div>
-            </Link>
+        {/* the five worlds */}
+        <div className="mx-auto mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12 max-w-6xl">
+          {pageSections.map((section) => (
+            <SectionFeature key={section.href} section={section} />
           ))}
         </div>
 
-        <a
-          href="#top"
-          className="mt-16 text-xs uppercase tracking-[0.3em] text-black/50 hover:text-black transition-colors"
-        >
-          Back to top
-        </a>
+        <div className="mt-16 flex justify-center">
+          <a
+            href="#top"
+            className="inline-flex items-center gap-2 font-brush text-base text-black/60 hover:text-black transition-colors"
+          >
+            Back to top
+          </a>
+        </div>
       </section>
     </div>
   )

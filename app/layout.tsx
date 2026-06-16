@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter, Permanent_Marker } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { CartProvider } from '@/components/cart-provider'
+import { MusicProvider } from '@/components/music-provider'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
@@ -53,11 +54,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${cormorant.variable} ${inter.variable} ${permanentMarker.variable} font-sans antialiased`}>
         <CartProvider>
-          <Header />
-          <main className="min-h-screen">
-            {children}
-          </main>
-          <Footer />
+          <MusicProvider>
+            <Header />
+            <main className="min-h-screen">
+              {children}
+            </main>
+            <Footer />
+          </MusicProvider>
         </CartProvider>
         <Analytics />
       </body>

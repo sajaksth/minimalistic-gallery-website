@@ -8,6 +8,7 @@ import { Menu, X, ShoppingBag } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useCart } from "@/components/cart-provider"
 import { CartDrawer } from "@/components/cart-drawer"
+import { MiniPlayer } from "@/components/mini-player"
 
 const navLinks = [
   { href: "/photos", label: "Photos" },
@@ -75,19 +76,22 @@ export function Header() {
               ))}
             </nav>
 
-            {/* Cart Button */}
-            <button
-              onClick={() => setIsOpen(true)}
-              className="relative p-2 -mr-2 lg:mr-0"
-              aria-label="Open cart"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {totalItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-foreground text-background text-xs flex items-center justify-center rounded-full">
-                  {totalItems}
-                </span>
-              )}
-            </button>
+            {/* Music player + Cart */}
+            <div className="flex items-center gap-3 lg:gap-4">
+              <MiniPlayer />
+              <button
+                onClick={() => setIsOpen(true)}
+                className="relative p-2 -mr-2 lg:mr-0"
+                aria-label="Open cart"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-foreground text-background text-xs flex items-center justify-center rounded-full">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
