@@ -4,7 +4,9 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { CartProvider } from '@/components/cart-provider'
 import { MusicProvider } from '@/components/music-provider'
-import { Header } from '@/components/header'
+import { MiniPlayer } from '@/components/mini-player'
+import { QuickNav } from '@/components/quick-nav'
+import { CartDrawer } from '@/components/cart-drawer'
 import { Footer } from '@/components/footer'
 
 const cormorant = Cormorant_Garamond({ 
@@ -55,11 +57,13 @@ export default function RootLayout({
       <body className={`${cormorant.variable} ${inter.variable} ${permanentMarker.variable} font-sans antialiased`}>
         <CartProvider>
           <MusicProvider>
-            <Header />
+            <QuickNav />
+            <MiniPlayer />
             <main className="min-h-screen">
               {children}
             </main>
             <Footer />
+            <CartDrawer />
           </MusicProvider>
         </CartProvider>
         <Analytics />

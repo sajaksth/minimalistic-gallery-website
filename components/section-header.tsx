@@ -26,7 +26,7 @@ export function SectionHeader({
   description?: string
 }) {
   return (
-    <section className="bg-white text-black px-6 pt-28 lg:pt-32 pb-10 text-center">
+    <section className="bg-white text-black px-6 pt-20 lg:pt-24 pb-10 text-center">
       <div className="flex flex-col items-center">
         <Link href="/" aria-label="Back to home">
           <img
