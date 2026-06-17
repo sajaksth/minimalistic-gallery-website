@@ -47,7 +47,7 @@ export function QuickNav() {
   if (pathname === "/") return null
 
   return (
-    <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center gap-2 max-w-[96vw] px-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="fixed top-6 left-3 right-[12rem] z-50 flex items-center justify-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {tabs.map((tab) => {
         const active = pathname === tab.href
         return (
