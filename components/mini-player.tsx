@@ -15,7 +15,7 @@ export function MiniPlayer() {
   if (pathname === "/music") return null
 
   return (
-    <div className="animate-float fixed top-6 right-4 z-50 flex items-center gap-2 rounded-full bg-white/90 backdrop-blur border border-black/10 shadow-md p-1.5 pr-3">
+    <div className="animate-float fixed top-10 right-4 z-50 flex items-center gap-2 rounded-full bg-white/90 backdrop-blur border border-black/10 shadow-md p-1.5 pr-3">
       <img
         src={track.cover}
         alt=""
