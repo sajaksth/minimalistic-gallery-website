@@ -1,9 +1,34 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { RoughPill } from "@/components/rough-pill"
+
+// Cycles through a project's photos inside the folder circle.
+function FolderSlideshow({ images }: { images: string[] }) {
+  const [index, setIndex] = useState(0)
+  useEffect(() => {
+    if (images.length <= 1) return
+    const t = setInterval(() => setIndex((p) => (p + 1) % images.length), 2500)
+    return () => clearInterval(t)
+  }, [images.length])
+  return (
+    <>
+      {images.map((src, i) => (
+        <img
+          key={src}
+          src={src}
+          alt=""
+          className={cn(
+            "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+            i === index ? "opacity-100" : "opacity-0"
+          )}
+        />
+      ))}
+    </>
+  )
+}
 
 type Photo = { src: string; title: string; projectId: string; type: string }
 type Project = { id: string; title: string; blurb?: string; cover: string }
@@ -102,7 +127,8 @@ export function PhotoBrowser({
           /* ---- default: project folders as circles ---- */
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 justify-items-center">
             {projects.map((project) => {
-              const count = photos.filter((p) => p.projectId === project.id).length
+              const projectImages = photos.filter((p) => p.projectId === project.id).map((p) => p.src)
+              const count = projectImages.length
               return (
                 <button
                   key={project.id}
@@ -111,7 +137,7 @@ export function PhotoBrowser({
                 >
                   <div className="relative w-32 h-32 sm:w-40 sm:h-40 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105">
                     <div className="absolute inset-0 rounded-full overflow-hidden">
-                      <img src={project.cover} alt={project.title} className="w-full h-full object-cover" />
+                      <FolderSlideshow images={projectImages.length ? projectImages : [project.cover]} />
                       <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
                     </div>
                     <RoughRing />
