@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Play, Pause, SkipBack, SkipForward, ChevronDown, ArrowRight, ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useMusic } from "@/components/music-provider"
+import { RoughPill } from "@/components/rough-pill"
 
 // Taglines that change with each slide
 const taglines = [
@@ -530,6 +531,20 @@ export default function HomePage() {
             Honest images, quiet sounds, and the things we carry — five worlds, one road.
           </p>
           <SketchLine className="w-44 mt-6 text-black/40" />
+
+          {/* quick tabs, consistent with the rest of the site */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+            {pageSections.map((section) => (
+              <Link
+                key={section.href}
+                href={section.href}
+                className="relative rounded-full px-4 py-1.5 font-brush text-sm bg-white text-black/55 hover:text-black transition-transform hover:-translate-y-0.5"
+              >
+                {section.label}
+                <RoughPill />
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* the five worlds */}

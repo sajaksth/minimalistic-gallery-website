@@ -10,8 +10,9 @@ export function MiniPlayer() {
   const pathname = usePathname()
   const { track, isPlaying, toggle, next } = useMusic()
 
-  // Home uses its own Music circle; the music page is the player itself.
-  if (pathname === "/" || pathname === "/music") return null
+  // The music page is the player itself. Elsewhere (incl. home) it floats and
+  // stays in sync with the home Music circle via the shared music context.
+  if (pathname === "/music") return null
 
   return (
     <div className="animate-float fixed top-6 right-4 z-50 flex items-center gap-2 rounded-full bg-white/90 backdrop-blur border border-black/10 shadow-md p-1.5 pr-3">
