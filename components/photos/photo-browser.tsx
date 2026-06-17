@@ -6,13 +6,20 @@ import { cn } from "@/lib/utils"
 import { RoughPill } from "@/components/rough-pill"
 
 // Cycles through a project's photos inside the folder circle.
-function FolderSlideshow({ images }: { images: string[] }) {
+// `offset` staggers each folder so they don't all change at once.
+function FolderSlideshow({ images, offset = 0 }: { images: string[]; offset?: number }) {
   const [index, setIndex] = useState(0)
   useEffect(() => {
     if (images.length <= 1) return
-    const t = setInterval(() => setIndex((p) => (p + 1) % images.length), 2500)
-    return () => clearInterval(t)
-  }, [images.length])
+    let interval: ReturnType<typeof setInterval>
+    const start = setTimeout(() => {
+      interval = setInterval(() => setIndex((p) => (p + 1) % images.length), 6000)
+    }, offset)
+    return () => {
+      clearTimeout(start)
+      clearInterval(interval)
+    }
+  }, [images.length, offset])
   return (
     <>
       {images.map((src, i) => (
@@ -21,7 +28,7 @@ function FolderSlideshow({ images }: { images: string[] }) {
           src={src}
           alt=""
           className={cn(
-            "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+            "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
             i === index ? "opacity-100" : "opacity-0"
           )}
         />
@@ -126,7 +133,7 @@ export function PhotoBrowser({
         ) : (
           /* ---- default: project folders as circles ---- */
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 justify-items-center">
-            {projects.map((project) => {
+            {projects.map((project, projectIndex) => {
               const projectImages = photos.filter((p) => p.projectId === project.id).map((p) => p.src)
               const count = projectImages.length
               return (
@@ -137,7 +144,10 @@ export function PhotoBrowser({
                 >
                   <div className="relative w-32 h-32 sm:w-40 sm:h-40 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105">
                     <div className="absolute inset-0 rounded-full overflow-hidden">
-                      <FolderSlideshow images={projectImages.length ? projectImages : [project.cover]} />
+                      <FolderSlideshow
+                        images={projectImages.length ? projectImages : [project.cover]}
+                        offset={projectIndex * 1500}
+                      />
                       <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
                     </div>
                     <RoughRing />
