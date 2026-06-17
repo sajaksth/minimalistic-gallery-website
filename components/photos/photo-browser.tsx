@@ -78,11 +78,6 @@ export function PhotoBrowser({
         })}
       </div>
 
-      {/* how it works */}
-      <p className="mt-4 text-center text-sm text-black/45">
-        Open a project folder below — or pick a category to see that style across every project.
-      </p>
-
       <div className="max-w-6xl mx-auto mt-10">
         {category !== "All" ? (
           /* ---- filter by type, across all projects ---- */

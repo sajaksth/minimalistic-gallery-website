@@ -50,10 +50,7 @@ const categories = ["All", "Landscape", "Portrait", "Architecture", "Nature"]
 export default function PhotosPage() {
   return (
     <div className="bg-white text-foreground">
-      <SectionHeader
-        title="Photos"
-        description="Browse by project, or filter by type."
-      />
+      <SectionHeader title="Photos" />
       <PhotoBrowser projects={projects} photos={photos} categories={categories} />
     </div>
   )
