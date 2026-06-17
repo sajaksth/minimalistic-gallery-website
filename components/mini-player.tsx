@@ -4,6 +4,7 @@ import { useState } from "react"
 import { usePathname } from "next/navigation"
 import { Play, Pause, SkipBack, SkipForward, Menu } from "lucide-react"
 import { useMusic } from "@/components/music-provider"
+import { RoughBox } from "@/components/rough-pill"
 import { cn } from "@/lib/utils"
 
 // Floating player shown on every page except the music page.
@@ -65,7 +66,7 @@ export function MiniPlayer() {
 
       {/* dropdown track list */}
       {listOpen && (
-        <div className="absolute top-full right-0 mt-3 w-60 rounded-xl bg-white/95 backdrop-blur border border-black/10 shadow-lg p-1.5">
+        <div className="absolute top-full right-0 mt-3 w-60 rounded-xl bg-white/95 backdrop-blur shadow-lg p-1.5 text-black/70">
           {tracks.map((t, i) => (
             <button
               key={t.src}
@@ -90,6 +91,8 @@ export function MiniPlayer() {
               )}
             </button>
           ))}
+          {/* sketchy hand-drawn border like the logo circle */}
+          <RoughBox />
         </div>
       )}
     </div>
