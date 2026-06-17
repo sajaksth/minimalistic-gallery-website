@@ -1,6 +1,7 @@
 import { StoryCard } from "@/components/stories/story-card"
 import { FeaturedStory } from "@/components/stories/featured-story"
 import { SectionHeader } from "@/components/section-header"
+import { RoughPill } from "@/components/rough-pill"
 
 const stories = [
   {
@@ -87,19 +88,20 @@ export default function StoriesPage() {
       />
 
       {/* Category Filters */}
-      <section className="border-y border-border">
+      <section className="bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-center gap-1 py-4 overflow-x-auto">
+          <div className="flex items-center justify-center gap-2 py-6 flex-wrap">
             {categories.map((category, index) => (
               <button
                 key={category}
-                className={`px-4 py-2 text-sm transition-colors whitespace-nowrap ${
+                className={`relative rounded-full px-4 py-1.5 font-brush text-sm whitespace-nowrap transition-transform hover:-translate-y-0.5 ${
                   index === 0
-                    ? "bg-foreground text-background"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-black text-white"
+                    : "bg-white text-black/55 hover:text-black"
                 }`}
               >
                 {category}
+                <RoughPill />
               </button>
             ))}
           </div>
