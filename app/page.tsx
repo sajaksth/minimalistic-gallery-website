@@ -270,7 +270,7 @@ function RoughRing() {
 export default function HomePage() {
   const [currentIndex, setCurrentIndex] = useState(0)
   // Shared, site-wide music state so playback continues across pages.
-  const { tracks, track, isPlaying, toggle, next: nextTrack, prev: prevTrack } = useMusic()
+  const { tracks, track, isPlaying, toggle, next: nextTrack, prev: prevTrack, select } = useMusic()
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % slideshow.length)
@@ -332,7 +332,7 @@ export default function HomePage() {
           key={section.href}
           style={{ left: section.left, top: section.top }}
           className={cn(
-            "absolute -translate-x-1/2 -translate-y-1/2",
+            "group absolute -translate-x-1/2 -translate-y-1/2",
             section.size
           )}
         >
@@ -341,15 +341,15 @@ export default function HomePage() {
             className="animate-float relative w-full h-full"
             style={{ animationDelay: section.delay }}
           >
-            {/* round hover sensor + nav link: clip-path makes only the circle interactive */}
+            {/* round nav link for the circle itself */}
             <Link
               href={section.href}
               aria-label={section.label}
-              className="peer absolute inset-0 z-10 rounded-full [clip-path:circle(50%)]"
+              className="absolute inset-0 z-10 rounded-full [clip-path:circle(50%)]"
             />
 
-            {/* pop wrapper: slight lift + scale when the round area is hovered */}
-            <div className="relative w-full h-full transition-transform duration-300 peer-hover:-translate-y-1.5 peer-hover:scale-[1.18] drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)] pointer-events-none">
+            {/* pop wrapper: slight lift + scale on hover */}
+            <div className="relative w-full h-full transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-[1.18] drop-shadow-[0_10px_15px_rgba(0,0,0,0.45)] pointer-events-none">
               {/* picture clipped to a circle */}
               <div className="absolute inset-0 rounded-full overflow-hidden">
                 <img
@@ -363,29 +363,30 @@ export default function HomePage() {
               <RoughRing />
             </div>
 
-            {/* label at rest -> open-arrow on hover (direct siblings of the peer so peer-hover works) */}
-            <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide pointer-events-none transition-opacity duration-300 peer-hover:opacity-0">
+            {/* label at rest -> open-arrow on hover */}
+            <span className="absolute inset-0 flex items-center justify-center text-white font-brush text-base tracking-wide pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
               {section.label}
             </span>
-            <span className="absolute inset-0 flex items-center justify-center text-white opacity-0 pointer-events-none transition-opacity duration-300 peer-hover:opacity-100">
+            <span className="absolute inset-0 flex items-center justify-center text-white opacity-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-100">
               <ArrowUpRight className="w-1/3 h-1/3" />
             </span>
 
-            {/* recent items, fanned out in an arc only when the circle is hovered */}
+            {/* recent items: clickable links, fanned out in an arc on hover */}
             {section.recent.map((img, i) => (
-              <img
+              <Link
                 key={img}
-                src={img}
-                alt=""
-                aria-hidden
+                href={section.href}
+                aria-label={`${section.label} — recent`}
                 style={{
                   left: arcPositions[section.arcDir][i].left,
                   top: arcPositions[section.arcDir][i].top,
                   transitionDelay: `${i * 60}ms`,
                 }}
-                className="absolute w-[60%] h-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border-2 border-white shadow-lg
-                  opacity-0 scale-50 peer-hover:opacity-100 peer-hover:scale-100 transition-all duration-300 pointer-events-none"
-              />
+                className="absolute w-[60%] h-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden border-2 border-white shadow-lg
+                  opacity-0 scale-0 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 hover:ring-2 hover:ring-white"
+              >
+                <img src={img} alt="" className="w-full h-full object-cover" />
+              </Link>
             ))}
           </div>
         </div>
@@ -397,21 +398,22 @@ export default function HomePage() {
         className="group absolute -translate-x-1/2 -translate-y-1/2 w-[11vmin] h-[11vmin] max-w-[96px] max-h-[96px]"
       >
         <div className="animate-float relative w-full h-full" style={{ animationDelay: "1.8s" }}>
-          {/* recent tracks fan out in an arc on hover (like the other circles) */}
+          {/* recent tracks: click a cover to play that track */}
           {tracks.slice(0, 3).map((t, i) => (
-            <img
+            <button
               key={t.cover}
-              src={t.cover}
-              alt=""
-              aria-hidden
+              onClick={() => select(i)}
+              aria-label={`Play ${t.title}`}
               style={{
                 left: arcPositions.down[i].left,
                 top: arcPositions.down[i].top,
                 transitionDelay: `${i * 60}ms`,
               }}
-              className="absolute w-[60%] h-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full object-cover border-2 border-white shadow-lg
-                opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 pointer-events-none"
-            />
+              className="absolute w-[60%] h-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden border-2 border-white shadow-lg
+                opacity-0 scale-0 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 hover:ring-2 hover:ring-white"
+            >
+              <img src={t.cover} alt="" className="w-full h-full object-cover" />
+            </button>
           ))}
 
           {/* track name + artist, on hover, above the circle */}
