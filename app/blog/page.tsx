@@ -93,23 +93,23 @@ export default function BlogPage() {
       <BlogGrid posts={blogPosts} />
       
       {/* Newsletter Section */}
-      <section className="bg-secondary py-20 lg:py-28">
+      <section className="bg-white py-20 lg:py-28">
         <div className="max-w-2xl mx-auto px-6 lg:px-8 text-center">
-          <h2 className="font-serif text-3xl lg:text-4xl font-medium text-balance">
+          <h2 className="font-brush text-3xl lg:text-4xl text-black">
             Never Miss a Post
           </h2>
-          <p className="mt-4 text-muted-foreground leading-relaxed">
+          <p className="mt-4 text-black/55 leading-relaxed">
             Subscribe to our weekly newsletter for the latest stories, insights, and creative inspiration delivered directly to your inbox.
           </p>
           <form className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 bg-background border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+              className="flex-1 px-4 py-3 bg-white border border-black/15 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-black/20"
             />
             <button
               type="submit"
-              className="px-6 py-3 bg-foreground text-background text-sm font-medium rounded-md hover:bg-foreground/90 transition-colors"
+              className="px-6 py-3 bg-black text-white text-sm font-brush rounded-full hover:scale-105 transition-transform"
             >
               Subscribe
             </button>
