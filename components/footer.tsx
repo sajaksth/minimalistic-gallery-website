@@ -38,8 +38,8 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-white text-black">
-      <SketchLine className="w-full h-4 text-black/60" />
+    <footer className="bg-black text-white">
+      <SketchLine className="w-full h-4 text-white/40" />
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Brand */}
@@ -48,22 +48,22 @@ export function Footer() {
               <img
                 src="/images/barebone-logo.png"
                 alt="Bare Bone Co."
-                className="w-9 h-9 object-contain"
+                className="w-9 h-9 object-contain invert"
               />
               <span className="font-brush text-2xl">Bare Bone Co.</span>
             </Link>
-            <p className="mt-4 text-sm text-black/55 leading-relaxed max-w-xs">
+            <p className="mt-4 text-sm text-white/55 leading-relaxed max-w-xs">
               A curated space for visual storytelling, sound, and creative expression.
             </p>
           </div>
 
           {/* Gallery Links */}
           <div>
-            <h3 className="font-brush text-lg mb-4 text-black">Gallery</h3>
+            <h3 className="font-brush text-lg mb-4 text-white">Gallery</h3>
             <ul className="flex flex-col gap-3">
               {footerLinks.gallery.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-black/55 hover:text-black transition-colors">
+                  <Link href={link.href} className="text-sm text-white/55 hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -73,11 +73,11 @@ export function Footer() {
 
           {/* Shop Links */}
           <div>
-            <h3 className="font-brush text-lg mb-4 text-black">Shop</h3>
+            <h3 className="font-brush text-lg mb-4 text-white">Shop</h3>
             <ul className="flex flex-col gap-3">
               {footerLinks.shop.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-black/55 hover:text-black transition-colors">
+                  <Link href={link.href} className="text-sm text-white/55 hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -87,11 +87,11 @@ export function Footer() {
 
           {/* Info Links */}
           <div>
-            <h3 className="font-brush text-lg mb-4 text-black">Information</h3>
+            <h3 className="font-brush text-lg mb-4 text-white">Information</h3>
             <ul className="flex flex-col gap-3">
               {footerLinks.info.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-black/55 hover:text-black transition-colors">
+                  <Link href={link.href} className="text-sm text-white/55 hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -102,16 +102,16 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-16">
-          <SketchLine className="w-full h-2.5 text-black/15" />
+          <SketchLine className="w-full h-2.5 text-white/20" />
           <div className="mt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-black/45">
+            <p className="text-xs text-white/45">
               {new Date().getFullYear()} Bare Bone Co. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              <Link href="#" className="text-xs text-black/45 hover:text-black transition-colors">
+              <Link href="#" className="text-xs text-white/45 hover:text-white transition-colors">
                 Privacy
               </Link>
-              <Link href="#" className="text-xs text-black/45 hover:text-black transition-colors">
+              <Link href="#" className="text-xs text-white/45 hover:text-white transition-colors">
                 Terms
               </Link>
             </div>
