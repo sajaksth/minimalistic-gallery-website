@@ -1,16 +1,17 @@
 import Link from "next/link"
 
-// Hand-drawn divider line, matching the rest of the site.
+// Hand-drawn divider line — a gently wobbly path (no filter, so it always renders).
 function SketchLine({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 200 12" preserveAspectRatio="none" className={className}>
-      <defs>
-        <filter id="footerRough">
-          <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
-        </filter>
-      </defs>
-      <path d="M2 6 H198" fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" filter="url(#footerRough)" />
+      <path
+        d="M1 6 C 18 3.5, 34 8.5, 52 5.5 S 86 8, 104 6 S 150 3.5, 170 7 S 192 5, 199 6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+      />
     </svg>
   )
 }
