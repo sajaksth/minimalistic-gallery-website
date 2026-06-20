@@ -42,10 +42,13 @@ type MusicContextValue = {
   current: number
   track: Track
   isPlaying: boolean
+  currentTime: number
+  duration: number
   toggle: () => void
   next: () => void
   prev: () => void
   select: (index: number) => void
+  seek: (seconds: number) => void
 }
 
 const MusicContext = createContext<MusicContextValue | null>(null)
@@ -60,6 +63,15 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [current, setCurrent] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+
+  const seek = (seconds: number) => {
+    const a = audioRef.current
+    if (!a) return
+    a.currentTime = seconds
+    setCurrentTime(seconds)
+  }
 
   const toggle = () => {
     const a = audioRef.current
@@ -86,12 +98,18 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <MusicContext.Provider
-      value={{ tracks, current, track: tracks[current], isPlaying, toggle, next, prev, select }}
+      value={{ tracks, current, track: tracks[current], isPlaying, currentTime, duration, toggle, next, prev, select, seek }}
     >
       {children}
       {/* Single persistent audio element: lives in the root layout, so music
           keeps playing as the visitor navigates between pages. */}
-      <audio ref={audioRef} src={tracks[current].src} onEnded={next} />
+      <audio
+        ref={audioRef}
+        src={tracks[current].src}
+        onEnded={next}
+        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+      />
     </MusicContext.Provider>
   )
 }
