@@ -9,10 +9,12 @@ import { cn } from "@/lib/utils"
 const tabs = [
   { href: "/", label: "Home", delay: "0s" },
   { href: "/photos", label: "Photos", delay: "0.4s" },
-  { href: "/stories", label: "Stories", delay: "0.8s" },
-  { href: "/music", label: "Music", delay: "1.2s" },
-  { href: "/blog", label: "Blog", delay: "1.6s" },
-  { href: "/shop", label: "Shop", delay: "2s" },
+  { href: "/illustrations", label: "Illustrations", delay: "0.8s" },
+  { href: "/travel", label: "Travel", delay: "1.2s" },
+  { href: "/stories", label: "Stories", delay: "1.6s" },
+  { href: "/music", label: "Music", delay: "2s" },
+  { href: "/blog", label: "Blog", delay: "2.4s" },
+  { href: "/shop", label: "Shop", delay: "2.8s" },
 ]
 
 // A rough, hand-drawn pill outline (uses currentColor so it matches the tab's text).

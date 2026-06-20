@@ -87,6 +87,36 @@ const sections = [
       "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=200&q=80",
     ],
   },
+  {
+    label: "Travel",
+    href: "/travel",
+    image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&q=80",
+    left: "10%",
+    top: "31%",
+    size: "w-[10vmin] h-[10vmin] max-w-[84px] max-h-[84px]",
+    delay: "1.0s",
+    arcDir: "down" as const,
+    recent: [
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=200&q=80",
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=200&q=80",
+      "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=200&q=80",
+    ],
+  },
+  {
+    label: "Illustrations",
+    href: "/illustrations",
+    image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80",
+    left: "90%",
+    top: "62%",
+    size: "w-[10vmin] h-[10vmin] max-w-[84px] max-h-[84px]",
+    delay: "2.2s",
+    arcDir: "left" as const,
+    recent: [
+      "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=200&q=80",
+      "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=200&q=80",
+      "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=200&q=80",
+    ],
+  },
 ]
 
 // Positions (relative to the circle, centered at 50%/50%) for the 3 recent thumbnails.
@@ -121,6 +151,28 @@ const pageSections = [
     narrative:
       "Visual narratives caught in passing — the road, the light, and the quiet in-between moments.",
     images: ["/gallery/1.JPEG", "/gallery/5.JPG", "/gallery/13.JPG"],
+  },
+  {
+    label: "Illustrations",
+    href: "/illustrations",
+    narrative:
+      "Drawn by hand — ink, line, and the shapes that don't sit still for a camera.",
+    images: [
+      "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=600&q=80",
+      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&q=80",
+      "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=600&q=80",
+    ],
+  },
+  {
+    label: "Travel",
+    href: "/travel",
+    narrative:
+      "Roads taken and the places between — far shores, high passes, and golden hours.",
+    images: [
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80",
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&q=80",
+      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&q=80",
+    ],
   },
   {
     label: "Stories",
@@ -322,7 +374,7 @@ export default function HomePage() {
         </p>
         {/* quiet index: names the areas visitors can explore */}
         <p className="mt-3 text-white/70 text-[1.5vmin] sm:text-xs uppercase tracking-[0.25em] drop-shadow text-center px-4">
-          Explore — Photos · Stories · Music · Blog · Shop
+          Explore — Photos · Illustrations · Travel · Stories · Music · Blog · Shop
         </p>
       </div>
 

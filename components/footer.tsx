@@ -18,6 +18,8 @@ function SketchLine({ className }: { className?: string }) {
 const footerLinks = {
   gallery: [
     { href: "/photos", label: "Photos" },
+    { href: "/illustrations", label: "Illustrations" },
+    { href: "/travel", label: "Travel" },
     { href: "/stories", label: "Stories" },
     { href: "/blog", label: "Blog" },
   ],
