@@ -32,9 +32,11 @@ function SeekRing({ progress, onSeek }: { progress: number; onSeek: (fraction: n
   const pad = 1.5
   const { w, h } = size
   const r = Math.max(0, h / 2 - pad)
+  // Pill outline starting at the bottom-right (where the track-list button sits),
+  // so the seeker begins and ends at that button.
   const d =
     w && h
-      ? `M ${pad} ${h / 2} L ${pad} ${pad + r} A ${r} ${r} 0 0 1 ${pad + r} ${pad} L ${w - pad - r} ${pad} A ${r} ${r} 0 0 1 ${w - pad} ${pad + r} L ${w - pad} ${h - pad - r} A ${r} ${r} 0 0 1 ${w - pad - r} ${h - pad} L ${pad + r} ${h - pad} A ${r} ${r} 0 0 1 ${pad} ${h - pad - r} Z`
+      ? `M ${w - pad - r} ${h - pad} L ${pad + r} ${h - pad} A ${r} ${r} 0 0 1 ${pad} ${h - pad - r} L ${pad} ${pad + r} A ${r} ${r} 0 0 1 ${pad + r} ${pad} L ${w - pad - r} ${pad} A ${r} ${r} 0 0 1 ${w - pad} ${pad + r} L ${w - pad} ${h - pad - r} A ${r} ${r} 0 0 1 ${w - pad - r} ${h - pad} Z`
       : ""
 
   useEffect(() => {
