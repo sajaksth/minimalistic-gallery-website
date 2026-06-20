@@ -10,7 +10,7 @@ function SketchLine({ className }: { className?: string }) {
           <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
         </filter>
       </defs>
-      <path d="M2 6 H198" fill="none" stroke="currentColor" strokeWidth="2" filter="url(#footerRough)" />
+      <path d="M2 6 H198" fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" filter="url(#footerRough)" />
     </svg>
   )
 }
@@ -38,7 +38,7 @@ const footerLinks = {
 export function Footer() {
   return (
     <footer className="bg-white text-black">
-      <SketchLine className="w-full h-3.5 text-black/35" />
+      <SketchLine className="w-full h-4 text-black/60" />
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Brand */}
