@@ -243,17 +243,18 @@ function RoughFrame() {
   )
 }
 
-// A hand-drawn divider line.
+// A hand-drawn divider line — gently wobbly path (no filter, always renders).
 function SketchLine({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 200 12" preserveAspectRatio="none" className={cn("h-3", className)}>
-      <defs>
-        <filter id="roughLine">
-          <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
-        </filter>
-      </defs>
-      <path d="M2 6 H198" fill="none" stroke="currentColor" strokeWidth="2" filter="url(#roughLine)" />
+      <path
+        d="M1 6 C 18 3.5, 34 8.5, 52 5.5 S 86 8, 104 6 S 150 3.5, 170 7 S 192 5, 199 6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+      />
     </svg>
   )
 }
