@@ -90,14 +90,14 @@ function SeekRing({ progress, onSeek }: { progress: number; onSeek: (fraction: n
   return (
     <svg ref={svgRef} className="absolute inset-0 w-full h-full overflow-visible" style={{ pointerEvents: "none" }}>
       {/* faint full-border track */}
-      <path ref={trackRef} d={d} fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth={1.5} />
-      {/* progress fill */}
+      <path ref={trackRef} d={d} fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth={1.5} />
+      {/* progress fill — darker line that grows as the song plays */}
       {len > 0 && (
         <path
           d={d}
           fill="none"
-          stroke="rgba(0,0,0,0.5)"
-          strokeWidth={1.5}
+          stroke="rgba(0,0,0,0.85)"
+          strokeWidth={2}
           strokeLinecap="round"
           strokeDasharray={len}
           strokeDashoffset={len * (1 - progress)}
