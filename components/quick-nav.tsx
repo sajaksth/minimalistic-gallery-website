@@ -10,7 +10,7 @@ const tabs = [
   { href: "/", label: "Home", delay: "0s" },
   { href: "/photos", label: "Photos", delay: "0.4s" },
   { href: "/illustrations", label: "Illustrations", delay: "0.8s" },
-  { href: "/travel", label: "Travel", delay: "1.2s" },
+  { href: "/travel", label: "Travel Journals", delay: "1.2s" },
   { href: "/stories", label: "Stories", delay: "1.6s" },
   { href: "/music", label: "Music", delay: "2s" },
   { href: "/blog", label: "Blog", delay: "2.4s" },

@@ -88,7 +88,7 @@ const sections = [
     ],
   },
   {
-    label: "Travel",
+    label: "Travel Journals",
     href: "/travel",
     image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&q=80",
     left: "10%",
@@ -164,10 +164,10 @@ const pageSections = [
     ],
   },
   {
-    label: "Travel",
+    label: "Travel Journals",
     href: "/travel",
     narrative:
-      "Roads taken and the places between — far shores, high passes, and golden hours.",
+      "Day-to-day from the road — stories, how-tos, and everything felt along the way.",
     images: [
       "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&q=80",
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&q=80",
@@ -375,7 +375,7 @@ export default function HomePage() {
         </p>
         {/* quiet index: names the areas visitors can explore */}
         <p className="mt-3 text-white/70 text-[1.5vmin] sm:text-xs uppercase tracking-[0.25em] drop-shadow text-center px-4">
-          Explore — Photos · Illustrations · Travel · Stories · Music · Blog · Shop
+          Explore — Photos · Illustrations · Travel Journals · Stories · Music · Blog · Shop
         </p>
       </div>
 

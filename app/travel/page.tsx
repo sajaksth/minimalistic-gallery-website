@@ -12,7 +12,7 @@ const travel = [
 export default function TravelPage() {
   return (
     <div className="bg-white text-foreground">
-      <SectionHeader title="Travel" />
+      <SectionHeader title="Travel Journals" />
       <section className="bg-white px-6 pb-24 max-w-6xl mx-auto">
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 [column-fill:_balance]">
           {travel.map((item) => (
