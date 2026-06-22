@@ -8,6 +8,7 @@ import { MiniPlayer } from '@/components/mini-player'
 import { QuickNav } from '@/components/quick-nav'
 import { CartDrawer } from '@/components/cart-drawer'
 import { Footer } from '@/components/footer'
+import { HideOnDashboard } from '@/components/hide-on-dashboard'
 
 const cormorant = Cormorant_Garamond({ 
   subsets: ["latin"],
@@ -57,13 +58,17 @@ export default function RootLayout({
       <body className={`${cormorant.variable} ${inter.variable} ${permanentMarker.variable} font-sans antialiased`}>
         <CartProvider>
           <MusicProvider>
-            <QuickNav />
-            <MiniPlayer />
+            <HideOnDashboard>
+              <QuickNav />
+              <MiniPlayer />
+            </HideOnDashboard>
             <main className="min-h-screen">
               {children}
             </main>
-            <Footer />
-            <CartDrawer />
+            <HideOnDashboard>
+              <Footer />
+              <CartDrawer />
+            </HideOnDashboard>
           </MusicProvider>
         </CartProvider>
         <Analytics />
