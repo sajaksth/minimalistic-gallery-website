@@ -2,13 +2,15 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { supabaseAdmin } from "@/lib/supabase/admin"
 import { saveJournal } from "../actions"
+import { CoverUpload } from "@/components/dashboard/cover-upload"
+import { JournalEditor } from "@/components/dashboard/journal-editor"
 
 export const dynamic = "force-dynamic"
 
 export default async function JournalForm({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
 
-  let row: Record<string, unknown> | null = null
+  let row: Record<string, any> | null = null
   if (id !== "new") {
     const { data } = await supabaseAdmin.from("journal_entries").select("*").eq("id", id).single()
     if (!data) notFound()
@@ -31,10 +33,6 @@ export default async function JournalForm({ params }: { params: Promise<{ id: st
           <input name="title" required defaultValue={v("title")} className={inputCls} />
         </Field>
 
-        <Field label="Slug" required help="URL id, e.g. day-one-in-pokhara">
-          <input name="slug" required defaultValue={v("slug")} className={inputCls} />
-        </Field>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field label="Trip" help="Optional — groups entries">
             <input name="trip" defaultValue={v("trip")} className={inputCls} />
@@ -44,20 +42,25 @@ export default async function JournalForm({ params }: { params: Promise<{ id: st
           </Field>
         </div>
 
-        <Field label="Date">
-          <input type="date" name="entry_date" defaultValue={v("entry_date")} className={inputCls} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <Field label="Start date">
+            <input type="date" name="start_date" defaultValue={v("start_date")} className={inputCls} />
+          </Field>
+          <Field label="End date">
+            <input type="date" name="end_date" defaultValue={v("end_date")} className={inputCls} />
+          </Field>
+        </div>
+
+        <Field label="Cover image">
+          <CoverUpload defaultUrl={v("cover_url")} />
         </Field>
 
         <Field label="Excerpt" help="Short summary shown in lists">
           <textarea name="excerpt" rows={2} defaultValue={v("excerpt")} className={inputCls} />
         </Field>
 
-        <Field label="Body">
-          <textarea name="body" rows={10} defaultValue={v("body")} className={inputCls} />
-        </Field>
-
-        <Field label="Cover image URL">
-          <input name="cover_url" defaultValue={v("cover_url")} className={inputCls} />
+        <Field label="What I saw, what I felt" help="Write freely and add photos inline">
+          <JournalEditor name="body" defaultValue={v("body")} />
         </Field>
 
         <label className="flex items-center gap-2 text-sm">
