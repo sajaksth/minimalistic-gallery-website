@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Play, Pause, SkipBack, SkipForward, ChevronDown, ArrowRight, ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useMusic } from "@/components/music-provider"
+import { supabase } from "@/lib/supabase/client"
 import { RoughPill } from "@/components/rough-pill"
 
 // Taglines that change with each slide
@@ -342,6 +343,31 @@ export default function HomePage() {
     return () => clearTimeout(t)
   }, [])
 
+  // Pull the latest published Travel Journals so the Travel circle shows real covers.
+  const [journals, setJournals] = useState<{ cover: string; slug: string }[]>([])
+  useEffect(() => {
+    let active = true
+    supabase
+      .from("journal_entries")
+      .select("slug, cover_url")
+      .eq("published", true)
+      .not("cover_url", "is", null)
+      .order("published_at", { ascending: false })
+      .limit(6)
+      .then(({ data }) => {
+        if (active && data) {
+          setJournals(
+            data
+              .filter((d) => d.cover_url)
+              .map((d) => ({ cover: d.cover_url as string, slug: d.slug as string }))
+          )
+        }
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
   return (
     <div className="scroll-smooth">
       {/* ===== Landing: full-screen hero ===== */}
@@ -380,7 +406,14 @@ export default function HomePage() {
       </div>
 
       {/* Small section circles scattered around the page */}
-      {sections.map((section) => (
+      {sections.map((section) => {
+        // Travel circle pulls real covers from published journals when available.
+        const useJournals = section.href === "/travel" && journals.length > 0
+        const cover = useJournals ? journals[0].cover : section.image
+        const recentItems = useJournals
+          ? journals.slice(0, 3).map((j) => ({ img: j.cover, href: `/travel/${j.slug}` }))
+          : section.recent.map((img) => ({ img, href: section.href }))
+        return (
         <div
           key={section.href}
           style={{ left: section.left, top: section.top }}
@@ -406,7 +439,7 @@ export default function HomePage() {
               {/* picture clipped to a circle */}
               <div className="absolute inset-0 rounded-full overflow-hidden">
                 <img
-                  src={section.image}
+                  src={cover}
                   alt={section.label}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -425,10 +458,10 @@ export default function HomePage() {
             </span>
 
             {/* recent items: clickable links, fanned out in an arc on hover */}
-            {section.recent.map((img, i) => (
+            {recentItems.map((item, i) => (
               <Link
-                key={img}
-                href={section.href}
+                key={item.img + i}
+                href={item.href}
                 aria-label={`${section.label} — recent`}
                 style={{
                   left: arcPositions[section.arcDir][i].left,
@@ -438,12 +471,13 @@ export default function HomePage() {
                 className="absolute w-[60%] h-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden border-2 border-white shadow-lg
                   opacity-0 scale-0 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 hover:ring-2 hover:ring-white"
               >
-                <img src={img} alt="" className="w-full h-full object-cover" />
+                <img src={item.img} alt="" className="w-full h-full object-cover" />
               </Link>
             ))}
           </div>
         </div>
-      ))}
+        )
+      })}
 
       {/* Music: a circle like the others, with the player folded in */}
       <div
