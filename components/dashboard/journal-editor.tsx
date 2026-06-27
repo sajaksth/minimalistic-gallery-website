@@ -8,7 +8,15 @@ import { Bold, Italic, Heading2, List, ImagePlus } from "lucide-react"
 
 // "What you see, what you get" body editor. Inline images upload to Supabase
 // Storage and embed by URL. The HTML is mirrored into a hidden input named "body".
-export function JournalEditor({ name = "body", defaultValue = "" }: { name?: string; defaultValue?: string }) {
+export function JournalEditor({
+  name = "body",
+  defaultValue = "",
+  bucket = "journal",
+}: {
+  name?: string
+  defaultValue?: string
+  bucket?: string
+}) {
   const [html, setHtml] = useState(defaultValue)
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -31,6 +39,7 @@ export function JournalEditor({ name = "body", defaultValue = "" }: { name?: str
     try {
       const fd = new FormData()
       fd.append("file", file)
+      fd.append("bucket", bucket)
       const res = await fetch("/api/dashboard/upload", { method: "POST", body: fd })
       const json = await res.json()
       if (res.ok && json.url) {

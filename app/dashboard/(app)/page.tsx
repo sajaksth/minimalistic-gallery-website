@@ -14,10 +14,11 @@ async function safeCount(table: string): Promise<number | null> {
 }
 
 export default async function Overview() {
-  const [journalCount, projectCount, photoCount] = await Promise.all([
+  const [journalCount, projectCount, photoCount, storyCount] = await Promise.all([
     safeCount("journal_entries"),
     safeCount("projects"),
     safeCount("photos"),
+    safeCount("stories"),
   ])
 
   return (
@@ -47,6 +48,17 @@ export default async function Overview() {
           <p className="mt-2 text-3xl font-semibold">{journalCount ?? "—"}</p>
           <p className="mt-2 text-xs text-black/45">
             {journalCount === null ? "Run supabase/journal.sql to set up the table" : "Manage entries →"}
+          </p>
+        </Link>
+
+        <Link
+          href="/dashboard/stories"
+          className="rounded-xl border border-black/10 bg-white p-5 hover:border-black/25 transition-colors"
+        >
+          <p className="text-sm text-black/55">Stories</p>
+          <p className="mt-2 text-3xl font-semibold">{storyCount ?? "—"}</p>
+          <p className="mt-2 text-xs text-black/45">
+            {storyCount === null ? "Run supabase/stories.sql to set up the table" : "Manage stories →"}
           </p>
         </Link>
       </div>

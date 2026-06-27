@@ -16,15 +16,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No file" }, { status: 400 })
   }
 
+  const allowed = ["journal", "photos", "stories"]
+  const requested = String(form.get("bucket") || "journal")
+  const bucket = allowed.includes(requested) ? requested : "journal"
+
   const ext = (file.name.split(".").pop() || "bin").toLowerCase()
   const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
 
-  const { error } = await supabaseAdmin.storage.from("journal").upload(path, file, {
+  const { error } = await supabaseAdmin.storage.from(bucket).upload(path, file, {
     contentType: file.type || undefined,
     upsert: false,
   })
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  const { data } = supabaseAdmin.storage.from("journal").getPublicUrl(path)
+  const { data } = supabaseAdmin.storage.from(bucket).getPublicUrl(path)
   return NextResponse.json({ url: data.publicUrl })
 }
