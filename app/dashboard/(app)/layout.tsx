@@ -6,6 +6,7 @@ import { LogoutButton } from "@/components/dashboard/logout-button"
 const nav = [
   { href: "/dashboard", label: "Overview" },
   { href: "/dashboard/photos", label: "Photos" },
+  { href: "/dashboard/illustrations", label: "Illustrations" },
   { href: "/dashboard/journal", label: "Travel Journals" },
   { href: "/dashboard/stories", label: "Stories" },
 ]
