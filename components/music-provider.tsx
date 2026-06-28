@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useRef, useState } from "react"
+import { supabase } from "@/lib/supabase/client"
 
 export type Track = {
   title: string
@@ -9,8 +10,8 @@ export type Track = {
   src: string
 }
 
-// Shared playlist.
-export const tracks: Track[] = [
+// Fallback playlist used until DB tracks load (or if none exist yet).
+const fallbackTracks: Track[] = [
   {
     title: "Instincts",
     artist: "Sajak Malla Shrestha",
@@ -61,10 +62,36 @@ export function useMusic() {
 
 export function MusicProvider({ children }: { children: React.ReactNode }) {
   const audioRef = useRef<HTMLAudioElement>(null)
+  const [tracks, setTracks] = useState<Track[]>(fallbackTracks)
   const [current, setCurrent] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
+
+  // Load tracks from the database; fall back to the built-in list if none.
+  useEffect(() => {
+    let active = true
+    supabase
+      .from("tracks")
+      .select("title, artist, cover_url, audio_url")
+      .order("sort_order", { ascending: true })
+      .then(({ data }) => {
+        if (active && data && data.length) {
+          setTracks(
+            data.map((t) => ({
+              title: (t.title as string) ?? "",
+              artist: (t.artist as string) ?? "",
+              cover: (t.cover_url as string) ?? "",
+              src: t.audio_url as string,
+            }))
+          )
+          setCurrent(0)
+        }
+      })
+    return () => {
+      active = false
+    }
+  }, [])
 
   const seek = (seconds: number) => {
     const a = audioRef.current
@@ -96,16 +123,18 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current])
 
+  const track = tracks[current] ?? tracks[0]
+
   return (
     <MusicContext.Provider
-      value={{ tracks, current, track: tracks[current], isPlaying, currentTime, duration, toggle, next, prev, select, seek }}
+      value={{ tracks, current, track, isPlaying, currentTime, duration, toggle, next, prev, select, seek }}
     >
       {children}
       {/* Single persistent audio element: lives in the root layout, so music
           keeps playing as the visitor navigates between pages. */}
       <audio
         ref={audioRef}
-        src={tracks[current].src}
+        src={track?.src}
         onEnded={next}
         onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
