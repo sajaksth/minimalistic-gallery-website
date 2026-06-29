@@ -2,6 +2,7 @@
 
 import { X, Minus, Plus, Trash2 } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { useCart } from "@/components/cart-provider"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -123,8 +124,13 @@ export function CartDrawer() {
                 <span className="text-muted-foreground">Subtotal</span>
                 <span className="font-medium">${totalPrice.toFixed(2)}</span>
               </div>
-              <Button className="w-full rounded-none h-12 text-sm tracking-wide uppercase">
-                Proceed to Checkout
+              <Button
+                asChild
+                className="w-full rounded-none h-12 text-sm tracking-wide uppercase"
+              >
+                <Link href="/checkout" onClick={() => setIsOpen(false)}>
+                  Proceed to Checkout
+                </Link>
               </Button>
               <p className="text-xs text-muted-foreground text-center mt-3">
                 Shipping and taxes calculated at checkout
