@@ -18,27 +18,13 @@ function field(formData: FormData, key: string) {
   return v === "" || v == null ? null : String(v)
 }
 
-async function upload(file: File, prefix: string) {
-  const ext = (file.name.split(".").pop() || "bin").toLowerCase()
-  const path = `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
-  const { error } = await supabaseAdmin.storage
-    .from("music")
-    .upload(path, file, { contentType: file.type || undefined })
-  if (error) throw new Error(error.message)
-  return supabaseAdmin.storage.from("music").getPublicUrl(path).data.publicUrl
-}
-
 export async function saveTrack(formData: FormData) {
   await requireUser()
   const id = String(formData.get("__id"))
 
-  let audio_url = field(formData, "audio_url")
-  const audio = formData.get("audio_file")
-  if (audio instanceof File && audio.size > 0) audio_url = await upload(audio, "audio")
-
-  let cover_url = field(formData, "cover_url")
-  const cover = formData.get("cover_file")
-  if (cover instanceof File && cover.size > 0) cover_url = await upload(cover, "cover")
+  // Files are uploaded client-side to /api/dashboard/upload; we receive URLs.
+  const audio_url = field(formData, "audio_url")
+  const cover_url = field(formData, "cover_url")
 
   if (!audio_url) throw new Error("Please upload an audio file")
 

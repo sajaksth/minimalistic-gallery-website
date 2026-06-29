@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { supabaseAdmin } from "@/lib/supabase/admin"
 import { CoverUpload } from "@/components/dashboard/cover-upload"
+import { UploadField } from "@/components/dashboard/upload-field"
 import { saveTrack } from "../actions"
 
 export const dynamic = "force-dynamic"
@@ -30,7 +31,6 @@ export default async function TrackForm({ params }: { params: Promise<{ id: stri
 
       <form action={saveTrack} className="mt-6 space-y-5">
         <input type="hidden" name="__id" value={id} />
-        <input type="hidden" name="audio_url" value={v("audio_url")} />
 
         <div>
           <label className="block text-sm font-medium mb-1">Title <span className="text-red-500">*</span></label>
@@ -46,15 +46,12 @@ export default async function TrackForm({ params }: { params: Promise<{ id: stri
           <label className="block text-sm font-medium mb-1">
             Audio file {id === "new" && <span className="text-red-500">*</span>}
           </label>
-          <input type="file" name="audio_file" accept="audio/*" required={id === "new"} className="text-sm" />
-          {id !== "new" && v("audio_url") && (
-            <p className="mt-1 text-xs text-black/45">Current file kept unless you choose a new one.</p>
-          )}
+          <UploadField name="audio_url" bucket="music" accept="audio/*" defaultUrl={v("audio_url")} />
         </div>
 
         <div>
           <label className="block text-sm font-medium mb-1">Cover art</label>
-          <CoverUpload defaultUrl={v("cover_url")} />
+          <CoverUpload defaultUrl={v("cover_url")} bucket="music" />
         </div>
 
         <div>

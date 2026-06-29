@@ -97,10 +97,10 @@ export async function deleteProject(formData: FormData) {
 export async function addPhoto(formData: FormData) {
   await requireUser()
   const projectId = String(formData.get("project_id"))
-  const file = formData.get("image_file")
-  if (!(file instanceof File) || file.size === 0) throw new Error("Please choose an image")
+  // Image is uploaded client-side to /api/dashboard/upload; we receive a URL.
+  const src_url = field(formData, "src_url")
+  if (!src_url) throw new Error("Please choose an image")
 
-  const src_url = await upload(file, "photo")
   const { error } = await supabaseAdmin.from("photos").insert({
     project_id: projectId,
     src_url,

@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { supabaseAdmin } from "@/lib/supabase/admin"
 import { CoverUpload } from "@/components/dashboard/cover-upload"
+import { UploadField } from "@/components/dashboard/upload-field"
 import { DeleteButton } from "@/components/dashboard/delete-button"
 import { saveProject, addPhoto, deletePhoto } from "../actions"
 
@@ -51,7 +52,7 @@ export default async function ProjectForm({ params }: { params: Promise<{ id: st
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">Cover image</label>
-          <CoverUpload defaultUrl={v("cover_url")} />
+          <CoverUpload defaultUrl={v("cover_url")} bucket="photos" />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">Sort order</label>
@@ -74,7 +75,7 @@ export default async function ProjectForm({ params }: { params: Promise<{ id: st
             <input type="hidden" name="project_id" value={id} />
             <div className="sm:col-span-1">
               <label className="block text-xs text-black/55 mb-1">Image *</label>
-              <input type="file" name="image_file" accept="image/*" required className="text-sm" />
+              <UploadField name="src_url" bucket="photos" accept="image/*" isImage />
             </div>
             <div>
               <label className="block text-xs text-black/55 mb-1">Title</label>

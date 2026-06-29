@@ -48,7 +48,7 @@ export default async function ProductForm({ params }: { params: Promise<{ id: st
         </div>
 
         <Field label="Product image">
-          <CoverUpload defaultUrl={v("image_url")} />
+          <CoverUpload defaultUrl={v("image_url")} bucket="shop" />
         </Field>
 
         <Field label="Description">

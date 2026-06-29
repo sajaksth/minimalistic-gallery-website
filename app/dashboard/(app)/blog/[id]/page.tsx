@@ -46,7 +46,7 @@ export default async function BlogForm({ params }: { params: Promise<{ id: strin
         </div>
 
         <Field label="Cover image">
-          <CoverUpload defaultUrl={v("cover_url")} />
+          <CoverUpload defaultUrl={v("cover_url")} bucket="blog" />
         </Field>
 
         <Field label="Excerpt" help="Short summary shown in lists">

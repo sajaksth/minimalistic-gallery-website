@@ -1,32 +1,69 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { ImagePlus, X } from "lucide-react"
+import { ImagePlus, X, Loader2 } from "lucide-react"
 
-// Cover image picker. The chosen File is submitted via the form (name="cover_file")
-// and uploaded server-side. On edit, the existing URL is kept (hidden input) unless replaced.
-export function CoverUpload({ defaultUrl = "" }: { defaultUrl?: string }) {
+// Cover image picker. Uploads the chosen file straight to /api/dashboard/upload
+// (a Route Handler, so it is NOT subject to the Server Action 1 MB body limit),
+// then stores only the returned public URL in the hidden "cover_url" input.
+export function CoverUpload({
+  defaultUrl = "",
+  bucket = "journal",
+}: {
+  defaultUrl?: string
+  bucket?: string
+}) {
   const [preview, setPreview] = useState(defaultUrl)
-  const [keepUrl, setKeepUrl] = useState(defaultUrl)
+  const [url, setUrl] = useState(defaultUrl)
+  const [uploading, setUploading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+
+  async function handleFile(file: File) {
+    setError(null)
+    setUploading(true)
+    setPreview(URL.createObjectURL(file))
+    try {
+      const fd = new FormData()
+      fd.append("file", file)
+      fd.append("bucket", bucket)
+      const res = await fetch("/api/dashboard/upload", { method: "POST", body: fd })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Upload failed")
+      setUrl(data.url)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Upload failed")
+      setPreview("")
+      setUrl("")
+    } finally {
+      setUploading(false)
+    }
+  }
 
   return (
     <div>
       {preview ? (
         <div className="relative w-48 h-32 rounded-lg overflow-hidden border border-black/10">
           <img src={preview} alt="" className="w-full h-full object-cover" />
-          <button
-            type="button"
-            onClick={() => {
-              setPreview("")
-              setKeepUrl("")
-              if (fileRef.current) fileRef.current.value = ""
-            }}
-            className="absolute top-1 right-1 rounded-full bg-black/60 p-1 text-white hover:bg-black"
-            aria-label="Remove cover"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
+          {uploading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+              <Loader2 className="w-5 h-5 animate-spin text-white" />
+            </div>
+          )}
+          {!uploading && (
+            <button
+              type="button"
+              onClick={() => {
+                setPreview("")
+                setUrl("")
+                if (fileRef.current) fileRef.current.value = ""
+              }}
+              className="absolute top-1 right-1 rounded-full bg-black/60 p-1 text-white hover:bg-black"
+              aria-label="Remove cover"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
       ) : (
         <button
@@ -42,16 +79,16 @@ export function CoverUpload({ defaultUrl = "" }: { defaultUrl?: string }) {
       <input
         ref={fileRef}
         type="file"
-        name="cover_file"
         accept="image/*"
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0]
-          if (f) setPreview(URL.createObjectURL(f))
+          if (f) handleFile(f)
         }}
       />
-      {/* preserve existing cover when not replaced */}
-      <input type="hidden" name="cover_url" value={keepUrl} />
+      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {/* Only the public URL is submitted with the form. */}
+      <input type="hidden" name="cover_url" value={url} />
     </div>
   )
 }

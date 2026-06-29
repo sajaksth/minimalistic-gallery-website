@@ -60,7 +60,7 @@ export default async function StoryForm({ params }: { params: Promise<{ id: stri
 
         <div>
           <label className="block text-sm font-medium mb-1">Cover image</label>
-          <CoverUpload defaultUrl={v("cover_url")} />
+          <CoverUpload defaultUrl={v("cover_url")} bucket="stories" />
         </div>
 
         <div>

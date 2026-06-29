@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabase/admin"
 import { DeleteButton } from "@/components/dashboard/delete-button"
+import { UploadField } from "@/components/dashboard/upload-field"
 import { addIllustration, deleteIllustration } from "./actions"
 
 export const dynamic = "force-dynamic"
@@ -34,7 +35,7 @@ export default async function IllustrationsList() {
       >
         <div>
           <label className="block text-xs text-black/55 mb-1">Image *</label>
-          <input type="file" name="image_file" accept="image/*" required className="text-sm" />
+          <UploadField name="src_url" bucket="illustrations" accept="image/*" isImage />
         </div>
         <div>
           <label className="block text-xs text-black/55 mb-1">Title</label>

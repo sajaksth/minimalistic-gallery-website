@@ -17,22 +17,12 @@ function field(formData: FormData, key: string) {
   return v === "" || v == null ? null : String(v)
 }
 
-async function upload(file: File) {
-  const ext = (file.name.split(".").pop() || "bin").toLowerCase()
-  const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
-  const { error } = await supabaseAdmin.storage
-    .from("illustrations")
-    .upload(path, file, { contentType: file.type || undefined })
-  if (error) throw new Error(error.message)
-  return supabaseAdmin.storage.from("illustrations").getPublicUrl(path).data.publicUrl
-}
-
 export async function addIllustration(formData: FormData) {
   await requireUser()
-  const file = formData.get("image_file")
-  if (!(file instanceof File) || file.size === 0) throw new Error("Please choose an image")
+  // Image is uploaded client-side to /api/dashboard/upload; we receive a URL.
+  const src_url = field(formData, "src_url")
+  if (!src_url) throw new Error("Please choose an image")
 
-  const src_url = await upload(file)
   const { error } = await supabaseAdmin.from("illustrations").insert({
     src_url,
     title: field(formData, "title"),
