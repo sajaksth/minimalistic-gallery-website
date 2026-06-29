@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No file" }, { status: 400 })
   }
 
-  const allowed = ["journal", "photos", "stories", "illustrations", "music"]
+  const allowed = ["journal", "photos", "stories", "illustrations", "music", "blog"]
   const requested = String(form.get("bucket") || "journal")
   const bucket = allowed.includes(requested) ? requested : "journal"
 

@@ -1,105 +1,91 @@
-import { BlogHeader } from "@/components/blog/blog-header"
-import { FeaturedPost } from "@/components/blog/featured-post"
-import { BlogGrid } from "@/components/blog/blog-grid"
+import Link from "next/link"
 import { SectionHeader } from "@/components/section-header"
+import { createSupabaseServer } from "@/lib/supabase/server"
+
+export const dynamic = "force-dynamic"
 
 export const metadata = {
   title: "Blog | BareBone",
-  description: "Weekly insights, behind-the-scenes stories, and creative musings from the BareBone team.",
+  description: "Notes from the field — thoughts, process, and small detours.",
 }
 
-const featuredPost = {
-  id: "1",
-  title: "The Art of Stillness: Finding Meaning in Quiet Moments",
-  excerpt: "In a world that constantly demands our attention, the quiet moments between become sacred. This week, we explore how stillness shapes our creative process and influences the work we share.",
-  date: "March 12, 2026",
-  readTime: "8 min read",
-  category: "Creative Process",
-  image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop",
-  author: {
-    name: "Elena Vance",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop",
-  },
+function fmtDate(iso: string | null) {
+  if (!iso) return ""
+  return new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
 }
 
-const blogPosts = [
-  {
-    id: "2",
-    title: "Behind the Lens: Documenting Urban Solitude",
-    excerpt: "A look at the techniques and emotions behind our latest photography series exploring empty city spaces.",
-    date: "March 5, 2026",
-    readTime: "5 min read",
-    category: "Photography",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&h=400&fit=crop",
-  },
-  {
-    id: "3",
-    title: "Sound Design: Crafting Atmosphere Through Audio",
-    excerpt: "How we approach sound design to create immersive audio experiences that complement visual storytelling.",
-    date: "February 27, 2026",
-    readTime: "6 min read",
-    category: "Music",
-    image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&h=400&fit=crop",
-  },
-  {
-    id: "4",
-    title: "The Making of 'Echoes': A Writing Journey",
-    excerpt: "From first draft to final edit, we share the creative journey behind our latest short story collection.",
-    date: "February 20, 2026",
-    readTime: "7 min read",
-    category: "Writing",
-    image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&h=400&fit=crop",
-  },
-  {
-    id: "5",
-    title: "Sustainable Creativity: Our Commitment to Ethical Production",
-    excerpt: "Exploring how we source materials and create products that align with our values of sustainability.",
-    date: "February 13, 2026",
-    readTime: "4 min read",
-    category: "Shop",
-    image: "https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=600&h=400&fit=crop",
-  },
-  {
-    id: "6",
-    title: "Color Theory in Practice: Building Visual Harmony",
-    excerpt: "A deep dive into how we use color to evoke emotion and create cohesive visual narratives.",
-    date: "February 6, 2026",
-    readTime: "6 min read",
-    category: "Design",
-    image: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&h=400&fit=crop",
-  },
-  {
-    id: "7",
-    title: "Community Spotlight: Artists Who Inspire Us",
-    excerpt: "Celebrating the talented creators in our community whose work pushes boundaries and inspires our own.",
-    date: "January 30, 2026",
-    readTime: "5 min read",
-    category: "Community",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop",
-  },
-]
+export default async function BlogPage() {
+  const supabase = await createSupabaseServer()
+  const { data } = await supabase
+    .from("blog_posts")
+    .select("slug, title, excerpt, category, read_time, cover_url, published_at, created_at")
+    .eq("published", true)
+    .order("published_at", { ascending: false })
 
-const categories = ["All", "Creative Process", "Photography", "Music", "Writing", "Design", "Shop", "Community"]
+  const posts = (data ?? []).map((p) => ({
+    slug: p.slug as string,
+    title: p.title as string,
+    excerpt: (p.excerpt as string) ?? "",
+    date: fmtDate((p.published_at as string) ?? (p.created_at as string)),
+    readTime: (p.read_time as string) ?? "",
+    category: (p.category as string) ?? "",
+    image: (p.cover_url as string) ?? "",
+  }))
 
-export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white text-foreground">
       <SectionHeader
         title="Blog"
         description="Notes from the field — thoughts, process, and small detours."
       />
-      <BlogHeader categories={categories} />
-      <FeaturedPost post={featuredPost} />
-      <BlogGrid posts={blogPosts} />
-      
+
+      <section className="max-w-6xl mx-auto px-6 lg:px-8 pb-24">
+        {posts.length === 0 ? (
+          <p className="text-center text-sm text-black/55">No posts published yet — check back soon.</p>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+            {posts.map((post) => (
+              <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
+                <article className="flex flex-col h-full">
+                  <div className="relative aspect-[3/2] rounded-lg overflow-hidden bg-secondary">
+                    {post.image && (
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )}
+                  </div>
+                  <div className="flex-1 flex flex-col pt-5">
+                    <div className="flex items-center gap-3 text-xs text-black/45">
+                      {post.category && <span className="uppercase tracking-wider">{post.category}</span>}
+                      {post.category && post.readTime && (
+                        <span className="w-1 h-1 rounded-full bg-black/30" />
+                      )}
+                      {post.readTime && <span>{post.readTime}</span>}
+                    </div>
+                    <h3 className="mt-3 font-serif text-xl font-medium leading-snug group-hover:text-accent transition-colors text-balance">
+                      {post.title}
+                    </h3>
+                    {post.excerpt && (
+                      <p className="mt-2 text-sm text-black/55 leading-relaxed line-clamp-2">{post.excerpt}</p>
+                    )}
+                    {post.date && <p className="mt-auto pt-4 text-xs text-black/45">{post.date}</p>}
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
       {/* Newsletter Section */}
       <section className="bg-white py-20 lg:py-28">
         <div className="max-w-2xl mx-auto px-6 lg:px-8 text-center">
-          <h2 className="font-brush text-3xl lg:text-4xl text-black">
-            Never Miss a Post
-          </h2>
+          <h2 className="font-brush text-3xl lg:text-4xl text-black">Never Miss a Post</h2>
           <p className="mt-4 text-black/55 leading-relaxed">
-            Subscribe to our weekly newsletter for the latest stories, insights, and creative inspiration delivered directly to your inbox.
+            Subscribe to our weekly newsletter for the latest stories, insights, and creative inspiration
+            delivered directly to your inbox.
           </p>
           <form className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
