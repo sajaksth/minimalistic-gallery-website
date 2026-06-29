@@ -2,121 +2,39 @@ import { ShopFilters } from "@/components/shop/shop-filters"
 import { ProductGrid } from "@/components/shop/product-grid"
 import { FeaturedProducts } from "@/components/shop/featured-products"
 import { SectionHeader } from "@/components/section-header"
+import { createSupabaseServer } from "@/lib/supabase/server"
 
-const products = [
-  {
-    id: "p1",
-    name: "Alpine Majesty Print",
-    price: 85,
-    category: "Prints",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
-    description: "Museum-quality archival print on heavyweight matte paper.",
-    sizes: ["8x10", "12x16", "18x24", "24x36"],
-  },
-  {
-    id: "p2",
-    name: "Gallery Tee - Black",
-    price: 45,
-    category: "Apparel",
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80",
-    description: "Premium organic cotton t-shirt with minimal logo.",
-    sizes: ["S", "M", "L", "XL"],
-  },
-  {
-    id: "p3",
-    name: "Ocean Blue Print",
-    price: 95,
-    category: "Prints",
-    image: "https://images.unsplash.com/photo-1682686581551-867e0b208bd1?w=600&q=80",
-    description: "Limited edition fine art print, signed and numbered.",
-    sizes: ["12x16", "18x24", "24x36"],
-  },
-  {
-    id: "p4",
-    name: "Ambient Horizons - Vinyl",
-    price: 35,
-    category: "Music",
-    image: "https://images.unsplash.com/photo-1614149162883-504ce4d13909?w=600&q=80",
-    description: "180g vinyl with full-color gatefold sleeve.",
-    sizes: ["Standard"],
-  },
-  {
-    id: "p5",
-    name: "Canvas Tote",
-    price: 28,
-    category: "Accessories",
-    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&q=80",
-    description: "Heavy-duty canvas tote with leather handles.",
-    sizes: ["One Size"],
-  },
-  {
-    id: "p6",
-    name: "Desert Silence Print",
-    price: 75,
-    category: "Prints",
-    image: "https://images.unsplash.com/photo-1682695794816-7b9da18ed470?w=600&q=80",
-    description: "Giclée print on archival cotton rag paper.",
-    sizes: ["8x10", "12x16", "18x24"],
-  },
-  {
-    id: "p7",
-    name: "Gallery Hoodie",
-    price: 85,
-    category: "Apparel",
-    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80",
-    description: "Heavyweight French terry hoodie with embroidered logo.",
-    sizes: ["S", "M", "L", "XL"],
-  },
-  {
-    id: "p8",
-    name: "Story Collection - Hardcover",
-    price: 42,
-    category: "Books",
-    image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&q=80",
-    description: "Complete anthology of stories with exclusive artwork.",
-    sizes: ["Standard"],
-  },
-  {
-    id: "p9",
-    name: "Forest Path Print",
-    price: 85,
-    category: "Prints",
-    image: "https://images.unsplash.com/photo-1682687218147-9806132dc697?w=600&q=80",
-    description: "Hand-finished print with subtle texture.",
-    sizes: ["12x16", "18x24", "24x36"],
-  },
-  {
-    id: "p10",
-    name: "Nocturnal Echoes - Vinyl",
-    price: 38,
-    category: "Music",
-    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80",
-    description: "Double LP on colored vinyl, limited pressing.",
-    sizes: ["Standard"],
-  },
-  {
-    id: "p11",
-    name: "Leather Notebook",
-    price: 32,
-    category: "Accessories",
-    image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=600&q=80",
-    description: "Hand-stitched leather journal with acid-free pages.",
-    sizes: ["A5", "A6"],
-  },
-  {
-    id: "p12",
-    name: "Gallery Cap",
-    price: 38,
-    category: "Apparel",
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80",
-    description: "Unstructured cotton cap with embroidered logo.",
-    sizes: ["One Size"],
-  },
-]
+export const dynamic = "force-dynamic"
 
-const categories = ["All", "Prints", "Apparel", "Music", "Books", "Accessories"]
+function parseSizes(raw: string | null): string[] {
+  if (!raw) return ["One Size"]
+  const list = raw.split(",").map((s) => s.trim()).filter(Boolean)
+  return list.length ? list : ["One Size"]
+}
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  const supabase = await createSupabaseServer()
+  const { data } = await supabase
+    .from("products")
+    .select("id, name, price, category, description, image_url, sizes, featured, sort_order, created_at")
+    .eq("active", true)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false })
+
+  const products = (data ?? []).map((p) => ({
+    id: p.id as string,
+    name: p.name as string,
+    price: Number(p.price ?? 0),
+    category: (p.category as string) ?? "Other",
+    image: (p.image_url as string) ?? "",
+    description: (p.description as string) ?? "",
+    sizes: parseSizes(p.sizes as string | null),
+    featured: !!p.featured,
+  }))
+
+  const featured = products.filter((p) => p.featured).slice(0, 3)
+  const categories = ["All", ...Array.from(new Set(products.map((p) => p.category)))]
+
   return (
     <div className="bg-white text-foreground">
       <SectionHeader
@@ -124,14 +42,17 @@ export default function ShopPage() {
         description="Prints, apparel, and small things made with care."
       />
 
-      {/* Featured Products */}
-      <FeaturedProducts products={products.slice(0, 3)} />
-
-      {/* Filters */}
-      <ShopFilters categories={categories} />
-
-      {/* Products Grid */}
-      <ProductGrid products={products} />
+      {products.length === 0 ? (
+        <section className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
+          <p className="text-center text-sm text-black/55">No products available yet — check back soon.</p>
+        </section>
+      ) : (
+        <>
+          {featured.length > 0 && <FeaturedProducts products={featured} />}
+          <ShopFilters categories={categories} />
+          <ProductGrid products={products} />
+        </>
+      )}
     </div>
   )
 }
