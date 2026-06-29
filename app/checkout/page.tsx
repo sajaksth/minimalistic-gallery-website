@@ -1,18 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useCart } from "@/components/cart-provider"
 import { SectionHeader } from "@/components/section-header"
-import { placeOrder } from "./actions"
+import { createCheckoutSession } from "./actions"
 
 const inputCls =
   "w-full rounded-lg border border-black/15 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-black/20"
 
 export default function CheckoutPage() {
-  const { items, totalPrice, clearCart } = useCart()
-  const router = useRouter()
+  const { items, totalPrice } = useCart()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -22,7 +20,7 @@ export default function CheckoutPage() {
     setLoading(true)
     const fd = new FormData(e.currentTarget)
     try {
-      const { id } = await placeOrder({
+      const { url } = await createCheckoutSession({
         customer_name: String(fd.get("customer_name") || ""),
         email: String(fd.get("email") || ""),
         address: String(fd.get("address") || ""),
@@ -38,8 +36,8 @@ export default function CheckoutPage() {
           category: i.category,
         })),
       })
-      clearCart()
-      router.push(`/checkout/success?id=${id}`)
+      // Hand off to Stripe's hosted checkout. Cart is cleared on the success page.
+      window.location.href = url
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong")
       setLoading(false)
@@ -105,10 +103,10 @@ export default function CheckoutPage() {
                 disabled={loading}
                 className="w-full h-12 rounded-none bg-black text-white text-sm uppercase tracking-wide hover:bg-black/90 transition-colors disabled:opacity-60"
               >
-                {loading ? "Placing order…" : "Place order"}
+                {loading ? "Redirecting to payment…" : "Continue to payment"}
               </button>
               <p className="text-xs text-black/45 text-center">
-                No payment is taken online — we'll email you to arrange payment and shipping.
+                You'll be taken to Stripe's secure checkout to complete payment.
               </p>
             </form>
 

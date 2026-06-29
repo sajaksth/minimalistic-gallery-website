@@ -10,6 +10,7 @@ type Order = {
   item_count: number
   subtotal: number
   status: string
+  payment_status: string | null
   created_at: string
 }
 
@@ -28,7 +29,7 @@ function fmtDate(iso: string) {
 export default async function OrdersList() {
   const { data, error } = await supabaseAdmin
     .from("orders")
-    .select("id, customer_name, email, item_count, subtotal, status, created_at")
+    .select("id, customer_name, email, item_count, subtotal, status, payment_status, created_at")
     .order("created_at", { ascending: false })
 
   const orders = (data ?? []) as Order[]
@@ -55,6 +56,7 @@ export default async function OrdersList() {
                 <th className="px-4 py-3 font-medium">Customer</th>
                 <th className="px-4 py-3 font-medium">Items</th>
                 <th className="px-4 py-3 font-medium">Total</th>
+                <th className="px-4 py-3 font-medium">Payment</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Date</th>
               </tr>
@@ -70,6 +72,17 @@ export default async function OrdersList() {
                   </td>
                   <td className="px-4 py-3 text-black/60">{o.item_count}</td>
                   <td className="px-4 py-3 text-black/60">${Number(o.subtotal).toFixed(2)}</td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-xs ${
+                        o.payment_status === "paid"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-neutral-100 text-black/55"
+                      }`}
+                    >
+                      {o.payment_status === "paid" ? "Paid" : "Unpaid"}
+                    </span>
+                  </td>
                   <td className="px-4 py-3">
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs capitalize ${

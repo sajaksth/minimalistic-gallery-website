@@ -35,7 +35,18 @@ export default async function OrderDetail({ params }: { params: Promise<{ id: st
       </Link>
       <div className="mt-3 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold">{order.customer_name}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-semibold">{order.customer_name}</h1>
+            <span
+              className={`rounded-full px-2 py-0.5 text-xs ${
+                order.payment_status === "paid"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-neutral-100 text-black/55"
+              }`}
+            >
+              {order.payment_status === "paid" ? "Paid" : "Unpaid"}
+            </span>
+          </div>
           <p className="text-sm text-black/55">{order.email}</p>
           <p className="mt-1 text-xs text-black/45">{fmtDateTime(order.created_at)}</p>
         </div>
